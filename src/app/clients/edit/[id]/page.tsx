@@ -1,53 +1,8 @@
+import { updateClient } from '@/actions/client';
 import { SubmitButton } from '@/components/submit-button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import prisma from '@/lib/prisma';
-import { revalidatePath } from 'next/cache';
-import { redirect } from 'next/navigation';
-import { z } from 'zod';
-
-
-const clientSchema = z.object({
-  name: z.string().min(1, 'O nome do cliente é obrigatório.'),
-  phone: z.string().optional(),
-  email: z.string().email('Email inválido.').optional(),
-});
-
-export async function updateClient(id: number, formData: FormData) {
-  'use server';
-
-  const rawFormData = {
-    name: formData.get('name'),
-    phone: formData.get('phone'),
-    email: formData.get('email'),
-  };
-
-  const validation = clientSchema.safeParse(rawFormData);
-
-  if (!validation.success) {
-    const errors = validation.error.issues;
-    console.error('Erros de validação:', errors);
-    return;
-  }
-
-  try {
-    await prisma.client.update({
-      where: { id: id },
-      data: {
-        name: validation.data.name,
-        phone: validation.data.phone,
-        email: validation.data.email,
-      },
-    });
-    console.log(`Cliente ${id} atualizado com sucesso!`);
-  } catch (error) {
-    console.error('Erro ao atualizar cliente:', error);
-    return;
-  }
-
-  revalidatePath('/clients/list');
-  redirect('/clients/list');
-}
 
 export default async function EditClientPage({ params }: { params: { id: string } }) {
   const clientId = parseInt(params.id);
@@ -64,7 +19,6 @@ export default async function EditClientPage({ params }: { params: { id: string 
     );
   }
 
-  // Bind a Server Action com o ID do cliente
   const updateClientWithId = updateClient.bind(null, clientId);
 
   return (

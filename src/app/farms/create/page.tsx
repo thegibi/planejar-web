@@ -1,52 +1,11 @@
+import { createFarm } from '@/actions/farm';
 import { SubmitButton } from '@/components/submit-button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import prisma from '@/lib/prisma';
-import { revalidatePath } from 'next/cache';
-import { redirect } from 'next/navigation';
-import { z } from 'zod';
 
-const farmSchema = z.object({
-  name: z.string().min(1, 'O nome da fazenda é obrigatório.'),
-  area: z.coerce.number().min(0.01, 'A área deve ser um número maior que zero.'),
-  location: z.string().min(1, 'A localidade é obrigatória.'),
-  sprayTank: z.string().optional(),
-  fertilizerSpreader: z.string().optional(),
-  ownerId: z.coerce.number().int('Selecione um proprietário válido.'),
-});
 
-export async function createFarm(formData: FormData) {
-  'use server';
 
-  const rawFormData = {
-    name: formData.get('name'),
-    area: formData.get('area'),
-    location: formData.get('location'),
-    sprayTank: formData.get('sprayTank'),
-    fertilizerSpreader: formData.get('fertilizerSpreader'),
-    ownerId: formData.get('ownerId'),
-  };
-
-  const validation = farmSchema.safeParse(rawFormData);
-
-  if (!validation.success) {
-    const errors = validation.error.issues;
-    console.error('Erros de validação:', errors);
-    return;
-  }
-
-  try {
-    await prisma.farm.create({
-      data: validation.data,
-    });
-    console.log('Fazenda criada com sucesso!');
-  } catch (error) {
-    console.error('Erro ao criar fazenda:', error);
-  }
-
-  revalidatePath('/farms/list');
-  redirect('/farms/list');
-}
 
 export default async function CreateFarmPage() {
   const clients = await prisma.client.findMany();
