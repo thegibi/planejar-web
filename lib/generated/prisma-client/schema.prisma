@@ -1,0 +1,47 @@
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+  output   = "../lib/generated/prisma-client"
+}
+
+model Client {
+  id    Int     @id @default(autoincrement())
+  name  String
+  phone String?
+  email String? @unique
+  farms Farm[]
+}
+
+model Farm {
+  id                 Int     @id @default(autoincrement())
+  name               String
+  location           String
+  area               Float
+  sprayTank          String?
+  fertilizerSpreader String?
+
+  owner   Client @relation(fields: [ownerId], references: [id])
+  ownerId Int
+
+  plots Plot[]
+}
+
+model Input {
+  id               Int    @id @default(autoincrement())
+  class            String
+  commercialBrand  String
+  activeIngredient String
+}
+
+model Plot {
+  id   Int    @id @default(autoincrement())
+  name String
+  area Float
+
+  farm   Farm @relation(fields: [farmId], references: [id])
+  farmId Int
+}

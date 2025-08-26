@@ -1,0 +1,79 @@
+import { SubmitButton } from '@/components/submit-button';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
+import prisma from '@/lib/prisma';
+import { revalidatePath } from 'next/cache';
+import { redirect } from 'next/navigation';
+import { z } from 'zod';
+
+const plotsSchema = z.object({
+  name: z.string().min(1, 'O nome do talhão é obrigatório.'),
+  area: z.coerce.number().min(0.01, 'A área deve ser um número maior que zero.'),
+  farmId: z.coerce.number().int('Selecione uma fazenda válida.'),
+});
+
+export async function createPlot(formData: FormData) {
+  'use server';
+
+  const rawFormData = {
+    name: formData.get('name'),
+    area: formData.get('area'),
+    farmId: formData.get('farmId'),
+  };
+
+  const validation = plotsSchema.safeParse(rawFormData);
+
+  if (!validation.success) {
+    const errors = validation.error.issues;
+    console.error('Erros de validação:', errors);
+    return;
+  }
+
+  try {
+    await prisma.plot.create({
+      data: validation.data,
+    });
+    console.log('Talhão criado com sucesso!');
+  } catch (error) {
+    console.error('Erro ao criar talhão:', error);
+  }
+  
+  revalidatePath('/plots/list');
+  redirect('/plots/list');
+}
+
+export default async function CreatePlotPage() {
+  const farms = await prisma.farm.findMany();
+
+  return (
+    <div className="container mx-auto mt-10 p-4 max-w-lg">
+      <h1 className="text-2xl font-bold mb-4">Cadastrar Novo Talhão</h1>
+
+      <form action={createPlot} className="space-y-5">
+        <div>
+          <Label className='mb-2' htmlFor="name">Nome do Talhão</Label>
+          <Input id="name" name="name" type="text" placeholder="Ex: Talhão do Milho" required />
+        </div>
+        <div>
+          <Label className='mb-2' htmlFor="area">Área (ha)</Label>
+          <Input id="area" name="area" type="number" step="0.01" placeholder="Ex: 50.3" required />
+        </div>
+
+        <div>
+          <Label className='mb-2' htmlFor="farmId">Fazenda</Label>
+          <select id="farmId" name="farmId" required
+            className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50">
+            <option value="">Selecione uma Fazenda</option>
+            {farms.map((farm) => (
+              <option key={farm.id} value={farm.id}>
+                {farm.name}
+              </option>
+            ))}
+          </select>
+        </div>
+        
+        <SubmitButton />
+      </form>
+    </div>
+  );
+}
