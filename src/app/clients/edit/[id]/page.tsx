@@ -4,8 +4,11 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import prisma from '@/lib/prisma';
 
-export default async function EditClientPage({ params }: { params: { id: string } }) {
-  const clientId = parseInt(params.id);
+export default async function EditClientPage(
+  props: PageProps<'/clients/edit/[id]'>
+) {
+  const { id } = await props.params;
+  const clientId = parseInt(id);
 
   const client = await prisma.client.findUnique({
     where: { id: clientId },

@@ -3,8 +3,9 @@ import { Table, TableBody, TableCaption, TableCell, TableHead, TableHeader, Tabl
 import prisma from '@/lib/prisma';
 import Link from 'next/link';
 
-export default async function PlotsByFarmPage({ params }: { params: Promise<{ id: string }> }) {
-  const farmId = parseInt((await params).id);
+export default async function PlotsByFarmPage(props: PageProps<'/farms/[id]/plots'>) {
+  const { id } = await props.params;
+  const farmId = parseInt(id);
 
   const farm = await prisma.farm.findUnique({
     where: { id: farmId },
