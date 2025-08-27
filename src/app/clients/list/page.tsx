@@ -1,5 +1,6 @@
 import { Button } from '@/components/ui/button';
 import { Table, TableBody, TableCaption, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
+import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip';
 import prisma from '@/lib/prisma';
 import { formatPhoneNumber } from '@/utils/format-phone';
 import Link from 'next/link';
@@ -21,7 +22,7 @@ export default async function ClientsPage() {
         <Table>
           <TableCaption>Uma tabela dos clientes cadastrados.</TableCaption>
           <TableHeader>
-            <TableRow>
+            <TableRow className="first:bg-gray-200">
               <TableHead>Nome</TableHead>
               <TableHead>Email</TableHead>
               <TableHead>Telefone</TableHead>
@@ -30,16 +31,23 @@ export default async function ClientsPage() {
           </TableHeader>
           <TableBody>
             {clients.map((client) => (
-              <TableRow key={client.id}>
+              <TableRow key={client.id} className="even:bg-gray-100">
                 <TableCell>{client.name}</TableCell>
                 <TableCell>{client.email}</TableCell>
                 <TableCell>{formatPhoneNumber(client.phone)}</TableCell>
                 <TableCell className="text-right">
-                  <Link href={`/clients/edit/${client.id}`}>
-                    <Button variant="outline" size="icon">
-                      <FaPencilAlt className="h-4 w-4" />
-                    </Button>
-                  </Link>
+                  <Tooltip>
+                    <TooltipTrigger>
+                      <Link href={`/clients/edit/${client.id}`}>
+                        <Button variant="outline" size="icon">
+                          <FaPencilAlt className="h-4 w-4" />
+                        </Button>
+                      </Link>
+                    </TooltipTrigger>
+                    <TooltipContent>
+                      <p>Editar Cliente</p>
+                    </TooltipContent>
+                  </Tooltip>
                 </TableCell>
               </TableRow>
             ))}

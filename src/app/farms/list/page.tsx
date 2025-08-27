@@ -1,7 +1,9 @@
 import { Button } from '@/components/ui/button';
 import { Table, TableBody, TableCaption, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
+import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip';
 import prisma from '@/lib/prisma';
 import Link from 'next/link';
+import { FaEye } from 'react-icons/fa';
 
 export default async function FarmsPage() {
   const farms = await prisma.farm.findMany({
@@ -31,24 +33,33 @@ export default async function FarmsPage() {
               <TableHead>Área (ha)</TableHead>
               <TableHead>Tanque de Pulverização (lt)</TableHead>
               <TableHead>Distribuidor de Adubo</TableHead>
-              <TableHead>Talhões</TableHead>
               <TableHead>Localidade</TableHead>
+              <TableHead>Talhões</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
             {farms.map((farm) => (
-              <TableRow key={farm.id}>
+              <TableRow key={farm.id} className="even:bg-gray-100">
                 <TableCell>{farm.name}</TableCell>
                 <TableCell>{farm.owner.name}</TableCell>
                 <TableCell>{farm.area} (ha)</TableCell>
                 <TableCell>{farm.sprayTank} (lt)</TableCell>
                 <TableCell>{farm.fertilizerSpreader}</TableCell>
-                <TableCell>
-                  <Link href={`/farms/${farm.id}/plots`}>
-                    <Button variant="link" className='cursor-pointer'>Ver Talhões</Button>
-                  </Link>
-                </TableCell>
                 <TableCell>{farm.location}</TableCell>
+                <TableCell>
+                  <Tooltip>
+                    <TooltipTrigger>
+                      <Link  href={`/farms/${farm.id}/plots`}>
+                        <Button  className='cursor-pointer'variant="outline" size="icon">
+                          <FaEye className="h-4 w-4" />
+                        </Button>
+                      </Link>
+                    </TooltipTrigger>
+                    <TooltipContent>
+                      <p>Ver Talhões</p>
+                    </TooltipContent>
+                  </Tooltip>
+                </TableCell>
               </TableRow>
             ))}
           </TableBody>

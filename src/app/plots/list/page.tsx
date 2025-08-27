@@ -1,7 +1,9 @@
 import { Button } from '@/components/ui/button';
 import { Table, TableBody, TableCaption, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
+import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip';
 import prisma from '@/lib/prisma';
 import Link from 'next/link';
+import { FaPencilAlt } from 'react-icons/fa';
 
 
 export default async function PlotsPage() {
@@ -28,14 +30,29 @@ export default async function PlotsPage() {
               <TableHead>Nome</TableHead>
               <TableHead>Área (ha)</TableHead>
               <TableHead>Fazenda</TableHead>
+               <TableHead className="text-right">Ações</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
             {plots.map((plot) => (
-              <TableRow key={plot.id}>
+              <TableRow key={plot.id} className="even:bg-gray-100">
                 <TableCell className="font-medium">{plot.name}</TableCell>
                 <TableCell>{plot.area} HA</TableCell>
                 <TableCell>{plot.farm.name}</TableCell>
+                <TableCell className="text-right">
+                  <Tooltip>
+                    <TooltipTrigger asChild>
+                      <Link href={`/plots/edit/${plot.id}`}>
+                        <Button variant="outline" size="icon">
+                          <FaPencilAlt className="h-4 w-4" />
+                        </Button>
+                      </Link>
+                    </TooltipTrigger>
+                    <TooltipContent>
+                      <p>Editar Talhão</p>
+                    </TooltipContent>
+                  </Tooltip>
+                </TableCell>
               </TableRow>
             ))}
           </TableBody>

@@ -1,4 +1,5 @@
 import { Header } from "@/components/header";
+import { TooltipProvider } from "@/components/ui/tooltip";
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
@@ -30,7 +31,9 @@ export default function RootLayout({
       >
         <Header />
         <main className="px-4">
-        {children}
+          <TooltipProvider>
+            {children}
+          </TooltipProvider>
         </main>
       </body>
     </html>
