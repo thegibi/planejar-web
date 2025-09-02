@@ -1,11 +1,11 @@
+'use server';
+
 import prisma from '@/lib/prisma';
 import { clientSchema } from '@/validations/client';
 import { revalidatePath } from 'next/cache';
 import { redirect } from 'next/navigation';
 
 export async function createClient(formData: FormData) {
-  'use server';
-
   const rawFormData = {
     name: formData.get('name'),
     phone: formData.get('phone'),
@@ -26,7 +26,6 @@ export async function createClient(formData: FormData) {
     await prisma.client.create({
       data: validation.data,
     });
-    console.log('Cliente criado com sucesso!');
   } catch (error)
   {
     console.error('Erro ao criar cliente:', error);
@@ -38,8 +37,6 @@ export async function createClient(formData: FormData) {
 
 
 export async function updateClient(id: number, formData: FormData) {
-  'use server';
-
   const rawFormData = {
     name: formData.get('name'),
     phone: formData.get('phone'),

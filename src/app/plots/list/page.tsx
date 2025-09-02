@@ -14,7 +14,7 @@ export default async function PlotsPage() {
   });
 
   return (
-    <div className="container mx-auto py-10">
+    <div className="py-10">
       <h1 className="text-2xl font-bold mb-6">Tabela de Talhões</h1>
       <div className="flex justify-end mb-4">
         <Link href="/plots/create">
@@ -26,7 +26,7 @@ export default async function PlotsPage() {
         <Table>
           <TableCaption>Uma lista dos talhões cadastrados.</TableCaption>
           <TableHeader>
-            <TableRow>
+            <TableRow className="first:bg-gray-200">
               <TableHead>Nome</TableHead>
               <TableHead>Área (ha)</TableHead>
               <TableHead>Fazenda</TableHead>
@@ -35,7 +35,7 @@ export default async function PlotsPage() {
           </TableHeader>
           <TableBody>
             {plots.map((plot) => (
-              <TableRow key={plot.id} className="even:bg-gray-100">
+              <TableRow key={plot.id} className="even:bg-gray-50">
                 <TableCell className="font-medium">{plot.name}</TableCell>
                 <TableCell>{plot.area} HA</TableCell>
                 <TableCell>{plot.farm.name}</TableCell>

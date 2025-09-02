@@ -10,9 +10,9 @@ export default async function ClientsPage() {
   const clients = await prisma.client.findMany();
 
   return (
-    <div className="container mx-auto py-10">
-      <div className="flex justify-between mb-6">
+    <div className="py-10">
         <h1 className="text-2xl font-bold">Tabela de Clientes</h1>
+      <div className="flex justify-end mb-6">
         <Link href="/clients/create">
           <Button>Cadastrar Cliente</Button>
         </Link>
@@ -31,7 +31,7 @@ export default async function ClientsPage() {
           </TableHeader>
           <TableBody>
             {clients.map((client) => (
-              <TableRow key={client.id} className="even:bg-gray-100">
+              <TableRow key={client.id} className="even:bg-gray-50">
                 <TableCell>{client.name}</TableCell>
                 <TableCell>{client.email}</TableCell>
                 <TableCell>{formatPhoneNumber(client.phone)}</TableCell>

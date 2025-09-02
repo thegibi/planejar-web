@@ -15,9 +15,9 @@ export default async function FarmsPage() {
 
 
   return (
-    <div className="container mx-auto py-10">
-      <div className="flex justify-between mb-6">
+    <div className="py-10">
         <h1 className="text-2xl font-bold">Tabela de Fazendas</h1>
+      <div className="flex justify-end mb-6">
         <Link href="/farms/create">
           <Button>Cadastrar Fazenda</Button>
         </Link>
@@ -27,7 +27,7 @@ export default async function FarmsPage() {
         <Table>
           <TableCaption>Uma lista das fazendas cadastradas.</TableCaption>
           <TableHeader>
-            <TableRow>
+            <TableRow className="first:bg-gray-200">
               <TableHead>Nome da Fazenda</TableHead>
               <TableHead>Nome do Proprietário</TableHead>
               <TableHead>Área (ha)</TableHead>
@@ -39,7 +39,7 @@ export default async function FarmsPage() {
           </TableHeader>
           <TableBody>
             {farms.map((farm) => (
-              <TableRow key={farm.id} className="even:bg-gray-100">
+              <TableRow key={farm.id} className="even:bg-gray-50">
                 <TableCell>{farm.name}</TableCell>
                 <TableCell>{farm.owner.name}</TableCell>
                 <TableCell>{farm.area} (ha)</TableCell>

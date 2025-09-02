@@ -3,6 +3,7 @@ import { Button } from '@/components/ui/button';
 import { Table, TableBody, TableCaption, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import prisma from '@/lib/prisma';
 import Link from 'next/link';
+import { FaPencilAlt } from 'react-icons/fa';
 
 const ITEMS_PER_PAGE = 20;
 
@@ -24,9 +25,9 @@ export default async function InputsPage({ searchParams }: {
   const totalPages = Math.ceil(totalCount / ITEMS_PER_PAGE);
 
   return (
-    <div className="container mx-auto py-10">
-      <div className="flex justify-between mb-6">
+    <div className="py-10">
         <h1 className="text-2xl font-bold">Tabela de Insumos</h1>
+      <div className="flex justify-end mb-6">
         <Link href="/inputs/create">
           <Button>Cadastrar Insumo</Button>
         </Link>
@@ -40,14 +41,24 @@ export default async function InputsPage({ searchParams }: {
               <TableHead>Classe</TableHead>
               <TableHead>Marca Comercial</TableHead>
               <TableHead>Ingrediente Ativo</TableHead>
+              <TableHead>Unidade de Medida (kg/Lt)</TableHead>
+              <TableHead>Ações</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
             {inputs.map((input) => (
-              <TableRow key={input.id} className="even:bg-gray-100">
+              <TableRow key={input.id} className="even:bg-gray-50">
                 <TableCell className='capitalize'>{input.class}</TableCell>
                 <TableCell className='uppercase'>{input.commercialBrand}</TableCell>
                 <TableCell className='capitalize'>{input.activeIngredient}</TableCell>
+                <TableCell className='capitalize'>{input.unitOfMeasure}</TableCell>
+                <TableCell className='text-right'>
+                  <Link href={`/inputs/edit/${input.id}`}>
+                    <Button variant="outline" size="icon">
+                      <FaPencilAlt className="h-4 w-4" />
+                    </Button>
+                  </Link>
+                </TableCell>
               </TableRow>
             ))}
           </TableBody>

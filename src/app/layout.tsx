@@ -30,7 +30,7 @@ export default function RootLayout({
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
         <Header />
-        <main className="px-4">
+        <main className="container mx-auto">
           <TooltipProvider>
             {children}
           </TooltipProvider>

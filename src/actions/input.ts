@@ -10,6 +10,7 @@ export async function createInput(formData: FormData) {
     class: formData.get('class'),
     commercialBrand: formData.get('commercialBrand'),
     activeIngredient: formData.get('activeIngredient'),
+    unitOfMeasure: formData.get('unitOfMeasure'),
   };
 
   const validation = inputSchema.safeParse(rawFormData);

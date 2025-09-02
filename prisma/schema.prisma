@@ -1,6 +1,6 @@
 datasource db {
   provider = "postgresql"
-  url      = env("DATABASE_URL")
+  url      = "prisma+postgres://accelerate.prisma-data.net/?api_key=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJqd3RfaWQiOjEsInNlY3VyZV9rZXkiOiJza19wSFdKOEs5SFpxcTlCY1d3NzQ3a0siLCJhcGlfa2V5IjoiMDFLM0NHRFpKUDBEUFRZU0VINTFCOTZQSFMiLCJ0ZW5hbnRfaWQiOiI3YjY2YTQ2ZjJlODg0MTJkYzlkZjIxMWI1MDVmZDY5ZmZmZmU0M2VjMTJmM2RhODRiMzM0MzE0MDAzOGMxNjBmIiwiaW50ZXJuYWxfc2VjcmV0IjoiYzIzZmQ3YTYtMTE0My00NDVjLTk0NWMtYjc5Yzk5ZTMyYjNlIn0.QPJcrz3sLrX1W8VK2i8823iKkA5IcGLftRBpc-T9Hk8"
 }
 
 generator client {
@@ -28,6 +28,8 @@ model Farm {
   ownerId            Int
   
   plots              Plot[]
+  inputs             Input[] 
+  plantings Planting[]
 }
 
 model Input {
@@ -35,6 +37,9 @@ model Input {
   class            String
   commercialBrand  String
   activeIngredient String
+  unitOfMeasure   String
+
+  farms            Farm[]
 }
 
 model Plot {
@@ -44,4 +49,20 @@ model Plot {
   
   farm   Farm   @relation(fields: [farmId], references: [id])
   farmId Int
+  plantings Planting[]
+}
+
+model Planting {
+  id              Int      @id @default(autoincrement())
+  crop            String
+  variety         String
+  population      Int
+  plantingDate    DateTime
+
+
+  farm            Farm     @relation(fields: [farmId], references: [id])
+  farmId          Int
+  
+  plot            Plot     @relation(fields: [plotId], references: [id])
+  plotId          Int
 }

@@ -21,6 +21,10 @@ export default function CreateInputPage() {
           <Label className='mb-2' htmlFor="activeIngredient">Ingrediente Ativo</Label>
           <Input id="activeIngredient" name="activeIngredient" type="text" placeholder="Ex: Glifosato, Azoxistrobina" required />
         </div>
+        <div>
+          <Label className='mb-2' htmlFor="unitOfMeasure">Unidade de Medida (kg/Lt)</Label>
+          <Input id="unitOfMeasure" name="unitOfMeasure" type="text" placeholder="Ex: 1kg, 50Lt" required />
+        </div>
         
         <SubmitButton />
       </form>
