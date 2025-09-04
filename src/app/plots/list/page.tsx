@@ -36,9 +36,9 @@ export default async function PlotsPage() {
           <TableBody>
             {plots.map((plot) => (
               <TableRow key={plot.id} className="even:bg-gray-50">
-                <TableCell className="font-medium">{plot.name}</TableCell>
-                <TableCell>{plot.area} HA</TableCell>
-                <TableCell>{plot.farm.name}</TableCell>
+                <TableCell className="font-medium uppercase">{plot.name.toLocaleUpperCase()}</TableCell>
+                <TableCell>{plot.area}</TableCell>
+                <TableCell className='capitalize'>{plot.farm.name}</TableCell>
                 <TableCell className="text-right">
                   <Tooltip>
                     <TooltipTrigger asChild>

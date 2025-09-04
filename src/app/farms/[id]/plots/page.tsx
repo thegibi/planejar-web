@@ -51,7 +51,6 @@ export default async function PlotsByFarmPage(props: PageProps<'/farms/[id]/plot
           <TableCaption>Uma lista dos talhões cadastrados para esta fazenda.</TableCaption>
           <TableHeader>
             <TableRow>
-              <TableHead>ID</TableHead>
               <TableHead>Nome</TableHead>
               <TableHead>Área (ha)</TableHead>
             </TableRow>
@@ -59,9 +58,8 @@ export default async function PlotsByFarmPage(props: PageProps<'/farms/[id]/plot
           <TableBody>
             {plots.map((plot) => (
               <TableRow key={plot.id}>
-                <TableCell className="font-medium">{plot.id}</TableCell>
-                <TableCell className='uppercase'>{plot.name}</TableCell>
-                <TableCell>{plot.area} (ha)</TableCell>
+                <TableCell className='uppercase'>{plot.name.toLocaleUpperCase()}</TableCell>
+                <TableCell>{plot.area}</TableCell>
               </TableRow>
             ))}
           </TableBody>

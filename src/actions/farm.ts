@@ -1,11 +1,11 @@
+'use server';
+
 import prisma from '@/lib/prisma';
 import { farmSchema } from '@/validations/farm';
 import { revalidatePath } from 'next/cache';
 import { redirect } from 'next/navigation';
 
 export async function createFarm(formData: FormData) {
-  'use server';
-
   const rawFormData = {
     name: formData.get('name'),
     area: formData.get('area'),

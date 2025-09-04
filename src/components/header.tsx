@@ -1,3 +1,4 @@
+import Image from 'next/image';
 import Link from 'next/link';
 import { Button } from './ui/button';
 
@@ -6,7 +7,12 @@ export function Header() {
     <header className="bg-white shadow-sm p-4 sticky top-0 z-50">
       <div className="container mx-auto flex justify-between items-center">
         <Link href="/" className="text-xl font-bold text-gray-800">
-          Planejar
+          <Image
+            src="/planejar-logo.png"
+            alt="Logo"
+            width={300}
+            height={300}
+          />
         </Link>
 
         <nav className="flex items-center space-x-4">
@@ -21,6 +27,9 @@ export function Header() {
           </Link>
           <Link href="/inputs/list">
             <Button variant="ghost">Insumos</Button>
+          </Link>
+          <Link href="/plantings/list">
+            <Button variant="ghost">Plantios</Button>
           </Link>
         </nav>
       </div>

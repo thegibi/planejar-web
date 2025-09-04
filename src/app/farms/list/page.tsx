@@ -42,8 +42,8 @@ export default async function FarmsPage() {
               <TableRow key={farm.id} className="even:bg-gray-50">
                 <TableCell>{farm.name}</TableCell>
                 <TableCell>{farm.owner.name}</TableCell>
-                <TableCell>{farm.area} (ha)</TableCell>
-                <TableCell>{farm.sprayTank} (lt)</TableCell>
+                <TableCell>{farm.area}</TableCell>
+                <TableCell>{farm.sprayTank}</TableCell>
                 <TableCell>{farm.fertilizerSpreader}</TableCell>
                 <TableCell>{farm.location}</TableCell>
                 <TableCell>

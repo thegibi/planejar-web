@@ -35,7 +35,7 @@ export default async function ClientsPage() {
                 <TableCell>{client.name}</TableCell>
                 <TableCell>{client.email}</TableCell>
                 <TableCell>{formatPhoneNumber(client.phone)}</TableCell>
-                <TableCell className="text-right">
+                <TableCell className="text-right space-x-3">
                   <Tooltip>
                     <TooltipTrigger>
                       <Link href={`/clients/edit/${client.id}`}>
