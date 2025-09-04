@@ -28,9 +28,9 @@ export function Header() {
           <Link href="/inputs/list">
             <Button variant="ghost">Insumos</Button>
           </Link>
-          <Link href="/plantings/list">
+          {/* <Link href="/plantings/list">
             <Button variant="ghost">Plantios</Button>
-          </Link>
+          </Link> */}
         </nav>
       </div>
     </header>
