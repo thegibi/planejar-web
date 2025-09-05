@@ -24,7 +24,7 @@ export default async function FarmMapPage(props: PageProps<'/farms/map/[id]'>) {
     .filter(plot => plot.geometry)
     .map(plot => JSON.parse(plot.geometry as string));
 
-  const geoJSONData = {
+  const geoJSONData: GeoJSON.FeatureCollection = {
     type: 'FeatureCollection',
     features: geoJSONFeatures.map(geom => ({
       type: 'Feature',
