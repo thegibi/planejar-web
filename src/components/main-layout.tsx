@@ -19,12 +19,14 @@ interface NavItemProps {
 const NavItem: React.FC<NavItemProps> = ({ href, icon, label, isCollapsed, isActive}) => (
   <Tooltip>
     <TooltipTrigger asChild>
-      <Link href={href} className={cn("flex items-center w-full px-3 py-2 rounded-md transition-colors hover:bg-gray-100", 
-        isActive && "bg-gray-200 hover:bg-gray-200")}>
-        <div className="h-6 w-6 flex items-center justify-center">
+      <Link href={href} className={cn("flex items-center w-full p-2 rounded-md transition-color hover:bg-transparent", 
+        !isCollapsed && "hover:bg-gray-100")}>
+        <div className={cn("flex items-center justify-center", isActive ? "text-gray-900" : "text-gray-600")}>
           {icon}
         </div>
-        <span className={cn("ml-4 whitespace-nowrap overflow-hidden transition-all", isCollapsed ? "w-0 opacity-0" : "w-auto opacity-100")}>
+        <span className={cn("ml-4 whitespace-nowrap overflow-hidden transition-all", 
+          isCollapsed ? "w-0 opacity-0" : "w-auto opacity-100", 
+          isActive ? "font-semibold text-gray-900" : "text-gray-600")}>
           {label}
         </span>
       </Link>
@@ -52,7 +54,7 @@ export function MainLayout({ children }: { children: React.ReactNode }) {
         </div>
         
         <nav className="flex flex-col space-y-2">
-             <NavItem
+          <NavItem
             href="/"
             icon={<FaHome className="h-5 w-5" />}
             label="Home"

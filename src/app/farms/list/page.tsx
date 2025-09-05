@@ -42,12 +42,12 @@ export default async function FarmsPage() {
           <TableBody>
             {farms.map((farm) => (
               <TableRow key={farm.id} className="even:bg-gray-50">
-                <TableCell>{farm.name}</TableCell>
-                <TableCell>{farm.owner.name}</TableCell>
+                <TableCell className='capitalize'>{farm.name.toLocaleLowerCase()}</TableCell>
+                <TableCell className='capitalize'>{farm.owner.name.toLocaleLowerCase()}</TableCell>
                 <TableCell>{farm.area}</TableCell>
                 <TableCell>{farm.sprayTank}</TableCell>
                 <TableCell>{farm.fertilizerSpreader}</TableCell>
-                <TableCell>{farm.location}</TableCell>
+                <TableCell className='capitalize'>{farm.location.toLocaleLowerCase()}</TableCell>
                 <TableCell>
                   <Tooltip>
                     <TooltipTrigger>
