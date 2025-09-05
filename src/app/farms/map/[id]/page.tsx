@@ -1,8 +1,9 @@
 import { Map } from '@/components/map';
 import prisma from '@/lib/prisma';
 
-export default async function FarmMapPage({ params }: { params: { id: string } }) {
-  const farmId = parseInt(params.id);
+export default async function FarmMapPage(props: PageProps<'/farms/map/[id]'>) {
+  const { id } = await props.params;
+  const farmId = parseInt(id);
 
   const farm = await prisma.farm.findUnique({
     where: { id: farmId },
@@ -19,10 +20,9 @@ export default async function FarmMapPage({ params }: { params: { id: string } }
     );
   }
 
-  // Prepara os dados de geometria dos talhões para o mapa
   const geoJSONFeatures = farm.plots
     .filter(plot => plot.geometry)
-    .map(plot => JSON.parse(plot.geometry));
+    .map(plot => JSON.parse(plot.geometry as string));
 
   const geoJSONData = {
     type: 'FeatureCollection',
