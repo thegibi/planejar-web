@@ -1,4 +1,4 @@
-import { Header } from "@/components/header";
+import { MainLayout } from "@/components/main-layout";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
@@ -28,16 +28,15 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
+    <html lang="pt-BR">
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
-        <Header />
-        <main className="container mx-auto">
           <TooltipProvider>
-            {children}
+            <MainLayout>
+              {children}
+            </MainLayout>
           </TooltipProvider>
-        </main>
       </body>
     </html>
   );

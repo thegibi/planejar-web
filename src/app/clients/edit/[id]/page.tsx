@@ -1,4 +1,5 @@
 import { updateClient } from '@/actions/client';
+import { BackButton } from '@/components/back-button';
 import { SubmitButton } from '@/components/submit-button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -41,7 +42,10 @@ export default async function EditClientPage(
           <Label className='mb-2' htmlFor="email">Email</Label>
           <Input id="email" name="email" type="email" placeholder="Ex: joao@example.com" defaultValue={client.email ?? ''} />
         </div>
-        <SubmitButton />
+        <div className="flex justify-between gap-2 mt-6">
+          <SubmitButton />
+          <BackButton />
+        </div>
       </form>
     </div>
   );

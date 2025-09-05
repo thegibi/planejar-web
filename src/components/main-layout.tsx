@@ -1,0 +1,106 @@
+'use client';
+
+import { Button } from '@/components/ui/button';
+import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip';
+import { cn } from '@/lib/utils';
+import Link from 'next/link';
+import { usePathname } from 'next/navigation';
+import { useState } from 'react';
+import { FaAngleDoubleLeft, FaFlask, FaHome, FaMapMarkerAlt, FaSeedling, FaTractor, FaUser } from 'react-icons/fa';
+
+interface NavItemProps {
+  href: string;
+  icon: React.ReactNode;
+  label: string;
+  isCollapsed: boolean;
+   isActive: boolean;
+}
+
+const NavItem: React.FC<NavItemProps> = ({ href, icon, label, isCollapsed, isActive}) => (
+  <Tooltip>
+    <TooltipTrigger asChild>
+      <Link href={href} className={cn("flex items-center w-full px-3 py-2 rounded-md transition-colors hover:bg-gray-100", 
+        isActive && "bg-gray-200 hover:bg-gray-200")}>
+        <div className="h-6 w-6 flex items-center justify-center">
+          {icon}
+        </div>
+        <span className={cn("ml-4 whitespace-nowrap overflow-hidden transition-all", isCollapsed ? "w-0 opacity-0" : "w-auto opacity-100")}>
+          {label}
+        </span>
+      </Link>
+    </TooltipTrigger>
+    <TooltipContent side="right" hidden={!isCollapsed}>
+      <p>{label}</p>
+    </TooltipContent>
+  </Tooltip>
+);
+
+export function MainLayout({ children }: { children: React.ReactNode }) {
+  const pathname = usePathname();
+  const [isCollapsed, setIsCollapsed] = useState(false);
+  const sidebarWidth = isCollapsed ? 'w-[70px]' : 'w-[256px]';
+  const paddingLeft = isCollapsed ? 'pl-[94px]' : 'pl-[280px]';
+
+  return (
+    <div className="flex">
+      {/* Sidebar */}
+      <aside className={cn("bg-white shadow-sm flex flex-col fixed top-0 left-0 h-full p-4 transition-all duration-300", sidebarWidth)}>
+        <div className="flex justify-end mb-4">
+          <Button variant="ghost" size="icon" onClick={() => setIsCollapsed(!isCollapsed)}>
+            <FaAngleDoubleLeft className={cn("h-5 w-5 transition-transform", isCollapsed ? "rotate-180" : "rotate-0")} />
+          </Button>
+        </div>
+        
+        <nav className="flex flex-col space-y-2">
+             <NavItem
+            href="/"
+            icon={<FaHome className="h-5 w-5" />}
+            label="Home"
+            isCollapsed={isCollapsed}
+            isActive={pathname === "/"}
+          />
+          <NavItem
+            href="/clients/list"
+            icon={<FaUser className="h-5 w-5" />}
+            label="Clientes"
+            isCollapsed={isCollapsed}
+            isActive={pathname === "/clients/list"}
+          />
+          <NavItem
+            href="/farms/list"
+            icon={<FaTractor className="h-5 w-5" />}
+            label="Fazendas"
+            isCollapsed={isCollapsed}
+            isActive={pathname === "/farms/list"}
+          />
+          <NavItem
+            href="/plots/list"
+            icon={<FaMapMarkerAlt className="h-5 w-5" />}
+            label="Talhões"
+            isCollapsed={isCollapsed}
+            isActive={pathname === "/plots/list"}
+          />
+          <NavItem
+            href="/inputs/list"
+            icon={<FaFlask className="h-5 w-5" />}
+            label="Insumos"
+            isCollapsed={isCollapsed}
+            isActive={pathname === "/inputs/list"}
+          />
+          <NavItem
+            href="/plantings/list"
+            icon={<FaSeedling className="h-5 w-5" />}
+            label="Plantios"
+            isCollapsed={isCollapsed}
+            isActive={pathname === "/plantings/list"}
+          />
+        </nav>
+      </aside>
+
+      {/* Conteúdo Principal */}
+      <main className={cn("flex-1 transition-all duration-300 pr-6", paddingLeft)}>
+        {children}
+      </main>
+    </div>
+  );
+}

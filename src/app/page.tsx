@@ -1,37 +1,44 @@
-import Link from "next/link";
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import prisma from '@/lib/prisma';
+import Link from 'next/link';
+import { FaFlask, FaMapMarkerAlt, FaSeedling, FaTractor, FaUser } from 'react-icons/fa';
 
-export default function Home() {
+
+export default async function HomePage() {
+  const [clientCount, farmCount, plotCount, inputCount, plantingCount] = await Promise.all([
+    prisma.client.count(),
+    prisma.farm.count(),
+    prisma.plot.count(),
+    prisma.input.count(),
+    prisma.planting.count(),
+  ]);
+
+  const cardData = [
+    { title: "Clientes", count: clientCount, icon: <FaUser className="h-6 w-6 text-gray-500" />, href: "/clients/list" },
+    { title: "Fazendas", count: farmCount, icon: <FaTractor className="h-6 w-6 text-gray-500" />, href: "/farms/list" },
+    { title: "Talhões", count: plotCount, icon: <FaMapMarkerAlt className="h-6 w-6 text-gray-500" />, href: "/plots/list" },
+    { title: "Insumos", count: inputCount, icon: <FaFlask className="h-6 w-6 text-gray-500" />, href: "/inputs/list" },
+    { title: "Plantios", count: plantingCount, icon: <FaSeedling className="h-6 w-6 text-gray-500" />, href: "/plantings/list" },
+  ];
+
   return (
-    <div className="font-sans grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20">
-      <main className="flex flex-col gap-[32px] row-start-2 items-center sm:items-start">
-        <div className="flex gap-4 items-center flex-col sm:flex-row">
-          <Link
-            className="rounded-sm border border-solid border-black/[.08] dark:border-white/[.145] transition-colors flex items-center justify-center hover:bg-[#f2f2f2] dark:hover:bg-[#1a1a1a] hover:border-transparent font-medium text-sm sm:text-base  p-6 w-full sm:w-auto"
-            href="/clients/create"
-          >
-            Cadastrar Cliente
+    <div className="container mx-auto py-10">
+      <h1 className="text-3xl font-bold mb-8">Visão Geral</h1>
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        {cardData.map((card) => (
+          <Link href={card.href} key={card.title}>
+            <Card className="hover:shadow-lg transition-shadow">
+              <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+                <CardTitle className="text-sm font-medium">{card.title}</CardTitle>
+                {card.icon}
+              </CardHeader>
+              <CardContent>
+                <div className="text-2xl font-bold">{card.count}</div>
+              </CardContent>
+            </Card>
           </Link>
-          <Link
-            className="rounded-sm border border-solid border-black/[.08] dark:border-white/[.145] transition-colors flex items-center justify-center hover:bg-[#f2f2f2] dark:hover:bg-[#1a1a1a] hover:border-transparent font-medium text-sm sm:text-base p-6 w-full sm:w-auto"
-            href="/farms/create"
-          >
-            Cadastrar Fazendas
-          </Link>
-          <Link
-            className="rounded-sm border border-solid border-black/[.08] dark:border-white/[.145] transition-colors flex items-center justify-center hover:bg-[#f2f2f2] dark:hover:bg-[#1a1a1a] hover:border-transparent font-medium text-sm sm:text-base p-6 w-full sm:w-auto"
-            href="/plots/create"
-          >
-            Cadastrar Talhões
-          </Link>
-          <Link
-            className="rounded-sm border border-solid border-black/[.08] dark:border-white/[.145] transition-colors flex items-center justify-center hover:bg-[#f2f2f2] dark:hover:bg-[#1a1a1a] hover:border-transparent font-medium text-sm sm:text-base p-6 w-full sm:w-auto"
-            href="/inputs/create"
-          >
-            Cadastrar Insumos
-          </Link>
-        </div>
-      </main>
-      
+        ))}
+      </div>
     </div>
   );
 }

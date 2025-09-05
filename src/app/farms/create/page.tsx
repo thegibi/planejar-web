@@ -1,4 +1,5 @@
 import { createFarm } from '@/actions/farm';
+import { BackButton } from '@/components/back-button';
 import { SubmitButton } from '@/components/submit-button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -48,8 +49,10 @@ export default async function CreateFarmPage() {
             ))}
           </select>
         </div>
-        
-        <SubmitButton />
+        <div className='flex gap-2 justify-between mt-6'>
+          <SubmitButton />
+          <BackButton />
+        </div>
       </form>
     </div>
   );

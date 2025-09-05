@@ -15,8 +15,8 @@ export default async function PlotsPage() {
 
   return (
     <div className="py-10">
-      <h1 className="text-2xl font-bold mb-6">Tabela de Talhões</h1>
-      <div className="flex justify-end mb-4">
+      <h1 className="text-2xl font-bold">Tabela de Talhões</h1>
+      <div className="flex justify-end mb-6">
         <Link href="/plots/create">
           <Button>Cadastrar Talhão</Button>
         </Link>

@@ -46,9 +46,11 @@ model Plot {
   id     Int    @id @default(autoincrement())
   name   String
   area   Float
+  geometry String?
   
   farm   Farm   @relation(fields: [farmId], references: [id])
   farmId Int
+  
   plantings Planting[]
 }
 
@@ -63,6 +65,5 @@ model Planting {
   farm            Farm     @relation(fields: [farmId], references: [id])
   farmId          Int
   
-  plot            Plot     @relation(fields: [plotId], references: [id])
-  plotId          Int
+  plots           Plot[] 
 }

@@ -3,7 +3,7 @@ import { Table, TableBody, TableCaption, TableCell, TableHead, TableHeader, Tabl
 import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip';
 import prisma from '@/lib/prisma';
 import Link from 'next/link';
-import { FaEye } from 'react-icons/fa';
+import { FaEye, FaMapMarkedAlt } from 'react-icons/fa';
 
 export default async function FarmsPage() {
   const farms = await prisma.farm.findMany({
@@ -35,6 +35,8 @@ export default async function FarmsPage() {
               <TableHead>Distribuidor de Adubo</TableHead>
               <TableHead>Localidade</TableHead>
               <TableHead>Talhões</TableHead>
+              <TableHead>Mapa</TableHead>
+              <TableHead className="text-right">Ações</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
@@ -57,6 +59,20 @@ export default async function FarmsPage() {
                     </TooltipTrigger>
                     <TooltipContent>
                       <p>Ver Talhões</p>
+                    </TooltipContent>
+                  </Tooltip>
+                </TableCell>
+                <TableCell>
+                  <Tooltip>
+                    <TooltipTrigger asChild>
+                      <Link href={`/farms/map/${farm.id}`}>
+                        <Button variant="outline" size="icon">
+                          <FaMapMarkedAlt className="h-4 w-4" />
+                        </Button>
+                      </Link>
+                    </TooltipTrigger>
+                    <TooltipContent>
+                      <p>Ver no Mapa</p>
                     </TooltipContent>
                   </Tooltip>
                 </TableCell>
