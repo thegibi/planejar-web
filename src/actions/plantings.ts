@@ -7,14 +7,19 @@ import { redirect } from 'next/navigation';
 
 export async function createPlanting(formData: FormData) {
 
+  const plotIds = formData.getAll('plotIds').map(id => parseInt(id.toString()));
+  const varieties = formData.getAll('varieties').map(variety => variety.toString());
+
   const rawFormData = {
     crop: formData.get('crop'),
-    variety: formData.get('variety'),
+    varieties: varieties,
     population: formData.get('population'),
     plantingDate: formData.get('plantingDate'),
     farmId: formData.get('farmId'),
-    plotId: formData.get('plotId'),
+    plotIds: plotIds,
   };
+
+  console.log('Raw form data:', rawFormData);
 
   const validation = plantingSchema.safeParse(rawFormData);
   if (!validation.success)
@@ -24,12 +29,42 @@ export async function createPlanting(formData: FormData) {
     return;
   }
 
+  console.log('Validated data:', validation.data);
+
+  // Verificar se a fazenda existe
+  const farmExists = await prisma.farm.findUnique({
+    where: { id: validation.data.farmId }
+  });
+
+  if (!farmExists)
+  {
+    console.error('Fazenda não encontrada:', validation.data.farmId);
+    return;
+  }
+
+  // Verificar se os talhões existem e pertencem à fazenda
+  const plotsExist = await prisma.plot.findMany({
+    where: {
+      id: { in: validation.data.plotIds },
+      farmId: validation.data.farmId
+    }
+  });
+
+  if (plotsExist.length !== validation.data.plotIds.length)
+  {
+    console.error('Alguns talhões não existem ou não pertencem à fazenda:', {
+      expected: validation.data.plotIds,
+      found: plotsExist.map(p => p.id)
+    });
+    return;
+  }
+
   try
   {
     await prisma.planting.create({
       data: {
         crop: validation.data.crop,
-        variety: validation.data.variety,
+        varieties: validation.data.varieties,
         population: validation.data.population,
         plantingDate: new Date(validation.data.plantingDate),
         farmId: validation.data.farmId,
@@ -38,6 +73,7 @@ export async function createPlanting(formData: FormData) {
         },
       },
     });
+    console.log('Plantio criado com sucesso!');
   } catch (error)
   {
     console.error('Erro ao criar plantio:', error);

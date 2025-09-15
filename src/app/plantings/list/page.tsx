@@ -9,6 +9,7 @@ export default async function PlantingsPage() {
   const plantings = await prisma.planting.findMany({
     include: {
       farm: true,
+      plots: true,
     },
     orderBy: {
       plantingDate: 'desc',
@@ -29,28 +30,25 @@ export default async function PlantingsPage() {
           <TableCaption>Uma lista dos plantios registrados.</TableCaption>
           <TableHeader>
             <TableRow>
-              <TableHead>ID</TableHead>
               <TableHead>Cultura</TableHead>
               <TableHead>Variedade</TableHead>
               <TableHead>População</TableHead>
               <TableHead>Fazenda</TableHead>
               <TableHead>Talhão</TableHead>
               <TableHead>Data do Plantio</TableHead>
-              <TableHead className="text-right">Ações</TableHead>
+              <TableHead className="text-right">Editar</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
             {plantings.map((planting) => (
               <TableRow key={planting.id} className="even:bg-gray-100">
-                <TableCell className="font-medium">{planting.id}</TableCell>
                 <TableCell>{planting.crop}</TableCell>
-                <TableCell>{planting.variety}</TableCell>
-                <TableCell>{planting.population}</TableCell>
+                <TableCell>{planting.varieties.join(', ').toLocaleUpperCase()}</TableCell>
+                <TableCell>{planting.population.toLocaleString()}</TableCell>
                 <TableCell>{planting.farm.name}</TableCell>
-                {/* <TableCell>{planting.plot.name}</TableCell> */}
-                <TableCell>{new Date(planting.plantingDate).toLocaleDateString()}</TableCell>
-                <TableCell className="text-right flex space-x-2 justify-end">
-                  {/* Botões de Ação (Editar, Deletar) - Adicione as rotas e actions aqui */}
+                <TableCell>{planting.plots.map(plot => plot.name).join(', ').toLocaleUpperCase()}</TableCell>
+                <TableCell>{new Date(planting.plantingDate).toLocaleDateString('pt-BR')}</TableCell>
+                <TableCell className="text-right">
                   <Tooltip>
                     <TooltipTrigger asChild>
                       <Link href={`/plantings/edit/${planting.id}`}>

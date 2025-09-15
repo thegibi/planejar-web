@@ -3,7 +3,7 @@ import { Table, TableBody, TableCaption, TableCell, TableHead, TableHeader, Tabl
 import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip';
 import prisma from '@/lib/prisma';
 import Link from 'next/link';
-import { FaEye, FaMapMarkedAlt } from 'react-icons/fa';
+import { FaEye, FaInfoCircle, FaMapMarkedAlt, FaPencilAlt } from 'react-icons/fa';
 
 export default async function FarmsPage() {
   const farms = await prisma.farm.findMany({
@@ -28,15 +28,16 @@ export default async function FarmsPage() {
           <TableCaption>Uma lista das fazendas cadastradas.</TableCaption>
           <TableHeader>
             <TableRow className="first:bg-gray-200">
-              <TableHead>Nome da Fazenda</TableHead>
-              <TableHead>Nome do Proprietário</TableHead>
+              <TableHead>Fazenda</TableHead>
+              <TableHead>Proprietário</TableHead>
               <TableHead>Área (ha)</TableHead>
               <TableHead>Tanque de Pulverização (lt)</TableHead>
               <TableHead>Distribuidor de Adubo</TableHead>
               <TableHead>Localidade</TableHead>
               <TableHead>Talhões</TableHead>
               <TableHead>Mapa</TableHead>
-              <TableHead className="text-right">Ações</TableHead>
+              <TableHead>Detalhes</TableHead>
+              <TableHead>Editar</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
@@ -46,11 +47,11 @@ export default async function FarmsPage() {
                 <TableCell className='capitalize'>{farm.owner.name.toLocaleLowerCase()}</TableCell>
                 <TableCell>{farm.area}</TableCell>
                 <TableCell>{farm.sprayTank}</TableCell>
-                <TableCell>{farm.fertilizerSpreader}</TableCell>
+                <TableCell>{farm.fertilizerSpreader || <span className="text-gray-500">N/A</span>}</TableCell>
                 <TableCell className='capitalize'>{farm.location.toLocaleLowerCase()}</TableCell>
                 <TableCell>
                   <Tooltip>
-                    <TooltipTrigger>
+                    <TooltipTrigger asChild>
                       <Link  href={`/farms/${farm.id}/plots`}>
                         <Button  className='cursor-pointer'variant="outline" size="icon">
                           <FaEye className="h-4 w-4" />
@@ -73,6 +74,34 @@ export default async function FarmsPage() {
                     </TooltipTrigger>
                     <TooltipContent>
                       <p>Ver no Mapa</p>
+                    </TooltipContent>
+                  </Tooltip>
+                </TableCell>
+                <TableCell>
+                  <Tooltip>
+                    <TooltipTrigger asChild>
+                      <Link href={`/farms/details/${farm.id}`}>
+                        <Button variant="outline" size="icon">
+                          <FaInfoCircle className="h-4 w-4" />
+                        </Button>
+                      </Link>
+                    </TooltipTrigger>
+                    <TooltipContent>
+                      <p>Ver Detalhes</p>
+                    </TooltipContent>
+                  </Tooltip>
+                </TableCell>
+                <TableCell>
+                  <Tooltip>
+                    <TooltipTrigger asChild>
+                      <Link href={`/farms/edit/${farm.id}`}>
+                        <Button variant="outline" size="icon">
+                          <FaPencilAlt className="h-4 w-4" />
+                        </Button>
+                      </Link>
+                    </TooltipTrigger>
+                    <TooltipContent>
+                      <p>Editar Fazenda</p>
                     </TooltipContent>
                   </Tooltip>
                 </TableCell>

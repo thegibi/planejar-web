@@ -38,3 +38,38 @@ export async function createFarm(formData: FormData) {
   revalidatePath('/farms/list');
   redirect('/farms/list');
 }
+
+export async function updateFarm(farmId: number, formData: FormData) {
+  const rawFormData = {
+    name: formData.get('name'),
+    area: formData.get('area'),
+    location: formData.get('location'),
+    sprayTank: formData.get('sprayTank'),
+    fertilizerSpreader: formData.get('fertilizerSpreader'),
+    ownerId: formData.get('ownerId'),
+  };
+
+  const validation = farmSchema.safeParse(rawFormData);
+
+  if (!validation.success)
+  {
+    const errors = validation.error.issues;
+    console.error('Erros de validação:', errors);
+    return;
+  }
+
+  try
+  {
+    await prisma.farm.update({
+      where: { id: farmId },
+      data: validation.data,
+    });
+    console.log('Fazenda atualizada com sucesso!');
+  } catch (error)
+  {
+    console.error('Erro ao atualizar fazenda:', error);
+  }
+
+  revalidatePath('/farms/list');
+  redirect('/farms/list');
+}

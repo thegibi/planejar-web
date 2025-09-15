@@ -57,7 +57,7 @@ model Plot {
 model Planting {
   id              Int      @id @default(autoincrement())
   crop            String
-  variety         String
+  varieties       String[]
   population      Int
   plantingDate    DateTime
 

@@ -16,8 +16,6 @@ export default function CreatePlantingPage() {
   const [selectedFarm, setSelectedFarm] = useState<any | null>(null);
   const [filteredPlots, setFilteredPlots] = useState<Plot[]>([]);
 
-
-
   const handleFarmChange: ChangeEventHandler<HTMLSelectElement> = (e) => {
     const farmId = parseInt(e.target.value);
     const farm = farms.find(f => f.id === farmId);
@@ -31,7 +29,7 @@ export default function CreatePlantingPage() {
     resolver: zodResolver(plantingSchema) as any,
     defaultValues: {
       crop: '',
-      variety: '',
+      varieties: [''],
       population: 0,
       plantingDate: '',
       farmId: 0,
@@ -42,7 +40,7 @@ export default function CreatePlantingPage() {
   const onSubmit = async (data: PlantingFormValues) => {
     const formData = new FormData();
     formData.append('crop', data.crop);
-    formData.append('variety', data.variety);
+    data.varieties.forEach(variety => formData.append('varieties', variety));
     formData.append('population', data.population.toString());
     formData.append('plantingDate', data.plantingDate);
     formData.append('farmId', data.farmId.toString());
@@ -66,7 +64,15 @@ export default function CreatePlantingPage() {
       <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-5">
         <div>
           <Label className='mb-2' htmlFor="farmId">Fazenda</Label>
-          <select id="farmId" name="farmId" required onChange={handleFarmChange}
+          <select 
+            id="farmId" 
+            {...form.register('farmId')}
+            required 
+            onChange={(e) => {
+              const farmId = parseInt(e.target.value);
+              form.setValue('farmId', farmId);
+              handleFarmChange(e);
+            }}
             className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50">
             <option value="">Selecione uma Fazenda</option>
             {farms.map((farm) => (
@@ -75,6 +81,7 @@ export default function CreatePlantingPage() {
               </option>
             ))}
           </select>
+          {form.formState.errors.farmId && <p className="text-red-500 text-sm mt-1">{form.formState.errors.farmId.message}</p>}
         </div>
         
           <Controller
@@ -84,7 +91,7 @@ export default function CreatePlantingPage() {
             <div>
               <Label className='mb-2'>Talhões</Label>
               <MultiSelect
-                options={selectedFarm?.plots.map((plot: any) => ({ label: `${plot.name} (${plot.area} ha)`, value: plot.id.toString() })) || []}
+                options={selectedFarm?.plots.map((plot: any) => ({ label: `${plot.name.toLocaleUpperCase()} (${plot.area} ha)`, value: plot.id.toString() })) || []}
                 value={field.value.map(id => id.toString())}
                 onValueChange={(values) => field.onChange(values.map(v => parseInt(v)))}
                 placeholder="Selecione um ou mais talhões..."
@@ -96,19 +103,87 @@ export default function CreatePlantingPage() {
         
         <div>
           <Label className='mb-2' htmlFor="crop">Cultura</Label>
-          <Input id="crop" name="crop" type="text" placeholder="Ex: Soja" required />
+          <Input 
+            id="crop" 
+            {...form.register('crop')}
+            type="text" 
+            placeholder="Ex: Soja" 
+            required 
+          />
+          {form.formState.errors.crop && <p className="text-red-500 text-sm mt-1">{form.formState.errors.crop.message}</p>}
         </div>
-        <div>
-          <Label className='mb-2' htmlFor="variety">Variedade</Label>
-          <Input id="variety" name="variety" type="text" placeholder="Ex: M8344" required />
-        </div>
+        
+        <Controller
+          control={form.control}
+          name="varieties"
+          render={({ field }) => (
+            <div>
+              <Label className='mb-2'>Variedades</Label>
+              {field.value.map((variety, index) => (
+                <div key={index} className="flex gap-2 mb-2">
+                  <Input
+                    type="text"
+                    placeholder="Ex: M8344"
+                    value={variety}
+                    onChange={(e) => {
+                      const newVarieties = [...field.value];
+                      newVarieties[index] = e.target.value;
+                      field.onChange(newVarieties);
+                    }}
+                    className="flex-1"
+                  />
+                  {field.value.length > 1 && (
+                    <Button
+                      type="button"
+                      variant="destructive"
+                      size="sm"
+                      onClick={() => {
+                        const newVarieties = field.value.filter((_, i) => i !== index);
+                        field.onChange(newVarieties);
+                      }}
+                    >
+                      Remover
+                    </Button>
+                  )}
+                </div>
+              ))}
+              <Button
+                type="button"
+                variant="outline"
+                size="sm"
+                onClick={() => {
+                  field.onChange([...field.value, '']);
+                }}
+                className="mt-2"
+              >
+                + Adicionar Variedade
+              </Button>
+              {form.formState.errors.varieties && <p className="text-red-500 text-sm mt-1">{form.formState.errors.varieties.message}</p>}
+            </div>
+          )}
+        />
+        
         <div>
           <Label className='mb-2' htmlFor="population">População</Label>
-          <Input id="population" name="population" type="number" step="1" placeholder="Ex: 250000" required />
+          <Input 
+            id="population" 
+            {...form.register('population')}
+            type="number" 
+            step="1" 
+            placeholder="Ex: 250000" 
+            required 
+          />
+          {form.formState.errors.population && <p className="text-red-500 text-sm mt-1">{form.formState.errors.population.message}</p>}
         </div>
         <div>
           <Label className='mb-2' htmlFor="plantingDate">Data do Plantio</Label>
-          <Input id="plantingDate" name="plantingDate" type="date" required />
+          <Input 
+            id="plantingDate" 
+            {...form.register('plantingDate')}
+            type="date" 
+            required 
+          />
+          {form.formState.errors.plantingDate && <p className="text-red-500 text-sm mt-1">{form.formState.errors.plantingDate.message}</p>}
         </div>
 
         <Button type="submit">Cadastrar Plantio</Button>

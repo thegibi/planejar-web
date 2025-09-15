@@ -30,7 +30,7 @@ export default async function PlotsPage() {
               <TableHead>Nome</TableHead>
               <TableHead>Área (ha)</TableHead>
               <TableHead>Fazenda</TableHead>
-               <TableHead className="text-right">Ações</TableHead>
+               <TableHead className="text-right">Editar</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>

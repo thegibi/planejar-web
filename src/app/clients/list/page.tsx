@@ -37,7 +37,7 @@ export default async function ClientsPage() {
                 <TableCell>{formatPhoneNumber(client.phone)}</TableCell>
                 <TableCell className="text-right space-x-3">
                   <Tooltip>
-                    <TooltipTrigger>
+                    <TooltipTrigger asChild>
                       <Link href={`/clients/edit/${client.id}`}>
                         <Button variant="outline" size="icon">
                           <FaPencilAlt className="h-4 w-4" />
