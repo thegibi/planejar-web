@@ -5,12 +5,12 @@ const prisma = new PrismaClient();
 
 async function listAllVarieties() {
   console.log('🔍 Listando todas as variedades no banco de dados:\n');
-  
+
   try {
     const varieties = await prisma.variety.findMany({
       orderBy: { name: 'asc' }
     });
-    
+
     if (varieties.length > 0) {
       console.log(`📋 Encontradas ${varieties.length} variedades:\n`);
       varieties.forEach((variety, index) => {
@@ -19,7 +19,7 @@ async function listAllVarieties() {
     } else {
       console.log('❌ Nenhuma variedade encontrada no banco.');
     }
-    
+
   } catch (error) {
     console.error('❌ Erro ao buscar variedades:', error);
   } finally {
