@@ -42,7 +42,7 @@ export default async function PlantingsPage() {
           <TableBody>
             {plantings.map((planting) => (
               <TableRow key={planting.id} className="even:bg-gray-100">
-                <TableCell>{planting.crop}</TableCell>
+                <TableCell>{planting.crop.toLocaleUpperCase()}</TableCell>
                 <TableCell>{planting.varieties.join(', ').toLocaleUpperCase()}</TableCell>
                 <TableCell>{planting.population.toLocaleString()}</TableCell>
                 <TableCell>{planting.farm.name}</TableCell>

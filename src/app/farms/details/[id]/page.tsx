@@ -14,6 +14,10 @@ interface PlantingData {
   id: number;
   crop: string;
   varieties: string[];
+  varietiesWithCycles: {
+    name: string;
+    cycle: number | null;
+  }[];
   population: number;
   plantingDate: string;
   plots: {
@@ -323,7 +327,18 @@ export default function FarmDetailsPage({ params }: FarmDetailsProps) {
                       <strong>Cultura:</strong> {planting.crop.toLocaleUpperCase()}
                     </div>
                     <div>
-                      <strong>Variedades:</strong> {planting.varieties.join(', ').toLocaleUpperCase()}
+                      <strong>Variedades:</strong>
+                      <div className="flex flex-wrap gap-1 mt-1">
+                        {planting.varietiesWithCycles?.map((variety, index) => (
+                          <span key={index} className="text-sm">
+                            {variety.name.toLocaleUpperCase()}
+                            {variety.cycle && (
+                              <span className="text-gray-600"> ({variety.cycle} dias)</span>
+                            )}
+                            {index < planting.varietiesWithCycles.length - 1 && ', '}
+                          </span>
+                        )) || planting.varieties.join(', ').toLocaleUpperCase()}
+                      </div>
                     </div>
                     <div>
                       <strong>População:</strong> {planting.population.toLocaleString()}
@@ -337,7 +352,7 @@ export default function FarmDetailsPage({ params }: FarmDetailsProps) {
                     <div className="flex flex-wrap gap-2 mt-1">
                       {planting.plots.map((plot) => (
                         <span key={plot.id} className="bg-gray-100 px-2 py-1 rounded text-sm">
-                          {plot.name} ({plot.area} ha)
+                          {plot.name.toLocaleUpperCase()} ({plot.area} ha)
                         </span>
                       ))}
                     </div>

@@ -1,16 +1,17 @@
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import prisma from '@/lib/prisma';
 import Link from 'next/link';
-import { FaFlask, FaMapMarkerAlt, FaSeedling, FaTractor, FaUser } from 'react-icons/fa';
+import { FaDna, FaFlask, FaMapMarkerAlt, FaSeedling, FaTractor, FaUser } from 'react-icons/fa';
 
 
 export default async function HomePage() {
-  const [clientCount, farmCount, plotCount, inputCount, plantingCount] = await Promise.all([
+  const [clientCount, farmCount, plotCount, inputCount, plantingCount, varietyCount] = await Promise.all([
     prisma.client.count(),
     prisma.farm.count(),
     prisma.plot.count(),
     prisma.input.count(),
     prisma.planting.count(),
+    prisma.variety.count(),
   ]);
 
   const cardData = [
@@ -18,6 +19,7 @@ export default async function HomePage() {
     { title: "Fazendas", count: farmCount, icon: <FaTractor className="h-6 w-6 text-gray-500" />, href: "/farms/list" },
     { title: "Talhões", count: plotCount, icon: <FaMapMarkerAlt className="h-6 w-6 text-gray-500" />, href: "/plots/list" },
     { title: "Insumos", count: inputCount, icon: <FaFlask className="h-6 w-6 text-gray-500" />, href: "/inputs/list" },
+    { title: "Variedades", count: varietyCount, icon: <FaDna className="h-6 w-6 text-gray-500" />, href: "/varieties/list" },
     { title: "Plantios", count: plantingCount, icon: <FaSeedling className="h-6 w-6 text-gray-500" />, href: "/plantings/list" },
   ];
 

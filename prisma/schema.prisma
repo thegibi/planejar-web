@@ -67,3 +67,9 @@ model Planting {
   
   plots           Plot[] 
 }
+
+model Variety {
+  id     Int    @id @default(autoincrement())
+  name   String @unique
+  cycle  Int    // ciclo em dias
+}

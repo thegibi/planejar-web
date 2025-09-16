@@ -1,6 +1,6 @@
 'use client';
 
-import { createPlanting, getFarmsWithPlots } from '@/actions/plantings';
+import { getFarmsWithPlots, getPlantingById, updatePlanting } from '@/actions/plantings';
 import { MultiSelect } from "@/components/multi-select";
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -11,11 +11,17 @@ import { ChangeEventHandler, useEffect, useState } from 'react';
 import { Controller, useForm } from 'react-hook-form';
 import { Plot } from '~/lib/generated/prisma-client';
 
-export default function CreatePlantingPage() {
+interface EditPlantingPageProps {
+  params: Promise<{ id: string }>;
+}
+
+export default function EditPlantingPage({ params }: EditPlantingPageProps) {
   const [farms, setFarms] = useState<any[]>([]);
   const [varieties, setVarieties] = useState<any[]>([]);
   const [selectedFarm, setSelectedFarm] = useState<any | null>(null);
   const [filteredPlots, setFilteredPlots] = useState<Plot[]>([]);
+  const [plantingId, setPlantingId] = useState<number>(0);
+  const [loading, setLoading] = useState(true);
 
   const handleFarmChange: ChangeEventHandler<HTMLSelectElement> = (e) => {
     const farmId = parseInt(e.target.value);
@@ -23,8 +29,6 @@ export default function CreatePlantingPage() {
     setSelectedFarm(farm);
     setFilteredPlots(farm ? farm.plots : []);
   };
-
-
 
   const form = useForm<PlantingFormValues>({
     resolver: zodResolver(plantingSchema) as any,
@@ -48,24 +52,61 @@ export default function CreatePlantingPage() {
     
     data.plotIds.forEach(id => formData.append('plotIds', id.toString()));
 
-    await createPlanting(formData);
+    await updatePlanting(plantingId, formData);
   };
 
   useEffect(() => {
     async function fetchData() {
-      const [farmsData, varietiesData] = await Promise.all([
-        getFarmsWithPlots(),
-        fetch('/api/varieties').then(res => res.json())
-      ]);
-      setFarms(farmsData);
-      setVarieties(varietiesData);
+      try {
+        const resolvedParams = await params;
+        const id = parseInt(resolvedParams.id);
+        setPlantingId(id);
+
+        const [farmsData, varietiesData, plantingData] = await Promise.all([
+          getFarmsWithPlots(),
+          fetch('/api/varieties').then(res => res.json()),
+          getPlantingById(id)
+        ]);
+
+        setFarms(farmsData);
+        setVarieties(varietiesData);
+
+        if (plantingData) {
+          // Encontrar a fazenda do plantio
+          const farm = farmsData.find(f => f.id === plantingData.farmId);
+          setSelectedFarm(farm);
+          setFilteredPlots(farm ? farm.plots : []);
+
+          // Preencher o formulário com os dados existentes
+          form.reset({
+            crop: plantingData.crop,
+            varieties: plantingData.varieties,
+            population: plantingData.population,
+            plantingDate: new Date(plantingData.plantingDate).toISOString().split('T')[0],
+            farmId: plantingData.farmId,
+            plotIds: plantingData.plots.map(plot => plot.id),
+          });
+        }
+      } catch (error) {
+        console.error('Erro ao carregar dados:', error);
+      } finally {
+        setLoading(false);
+      }
     }
     fetchData();
-  }, []);
+  }, [params, form]);
+
+  if (loading) {
+    return (
+      <div className="container mx-auto mt-10 p-4 max-w-lg">
+        <div className="text-center">Carregando...</div>
+      </div>
+    );
+  }
 
   return (
     <div className="container mx-auto mt-10 p-4 max-w-lg">
-      <h1 className="text-2xl font-bold mb-4">Cadastrar Plantio</h1>
+      <h1 className="text-2xl font-bold mb-4">Editar Plantio</h1>
       <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-5">
         <div>
           <Label className='mb-2' htmlFor="farmId">Fazenda</Label>
@@ -89,21 +130,21 @@ export default function CreatePlantingPage() {
           {form.formState.errors.farmId && <p className="text-red-500 text-sm mt-1">{form.formState.errors.farmId.message}</p>}
         </div>
         
-          <Controller
-            control={form.control}
-            name="plotIds"
-            render={({ field }) => (
-            <div>
-              <Label className='mb-2'>Talhões</Label>
-              <MultiSelect
-                options={selectedFarm?.plots.map((plot: any) => ({ label: `${plot.name.toLocaleUpperCase()} (${plot.area} ha)`, value: plot.id.toString() })) || []}
-                value={field.value.map(id => id.toString())}
-                onValueChange={(values) => field.onChange(values.map(v => parseInt(v)))}
-                placeholder="Selecione um ou mais talhões..."
-              />
-              {form.formState.errors.plotIds && <p className="text-red-500 text-sm mt-1">{form.formState.errors.plotIds.message}</p>}
-            </div>
-          )}
+        <Controller
+          control={form.control}
+          name="plotIds"
+          render={({ field }) => (
+          <div>
+            <Label className='mb-2'>Talhões</Label>
+            <MultiSelect
+              options={selectedFarm?.plots.map((plot: any) => ({ label: `${plot.name.toLocaleUpperCase()} (${plot.area} ha)`, value: plot.id.toString() })) || []}
+              value={field.value.map(id => id.toString())}
+              onValueChange={(values) => field.onChange(values.map(v => parseInt(v)))}
+              placeholder="Selecione um ou mais talhões..."
+            />
+            {form.formState.errors.plotIds && <p className="text-red-500 text-sm mt-1">{form.formState.errors.plotIds.message}</p>}
+          </div>
+        )}
         />
         
         <div>
@@ -161,7 +202,7 @@ export default function CreatePlantingPage() {
           {form.formState.errors.plantingDate && <p className="text-red-500 text-sm mt-1">{form.formState.errors.plantingDate.message}</p>}
         </div>
 
-        <Button type="submit">Cadastrar Plantio</Button>
+        <Button type="submit">Atualizar Plantio</Button>
       </form>
     </div>
   );

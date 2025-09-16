@@ -40,7 +40,27 @@ export async function GET(
       );
     }
 
-    return NextResponse.json(farm);
+    // Buscar todas as variedades para combinar com os plantios
+    const varieties = await prisma.variety.findMany();
+
+    // Mapear os plantios para incluir os ciclos das variedades
+    const plantingsWithVarietyCycles = farm.plantings.map(planting => ({
+      ...planting,
+      varietiesWithCycles: planting.varieties.map(varietyName => {
+        const variety = varieties.find(v => v.name === varietyName);
+        return {
+          name: varietyName,
+          cycle: variety?.cycle || null
+        };
+      })
+    }));
+
+    const farmWithVarietyCycles = {
+      ...farm,
+      plantings: plantingsWithVarietyCycles
+    };
+
+    return NextResponse.json(farmWithVarietyCycles);
   } catch (error)
   {
     console.error('Erro ao buscar detalhes da fazenda:', error);

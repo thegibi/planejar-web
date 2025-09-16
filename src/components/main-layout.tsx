@@ -6,7 +6,7 @@ import { cn } from '@/lib/utils';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { useState } from 'react';
-import { FaAngleDoubleLeft, FaFlask, FaHome, FaMapMarkerAlt, FaSeedling, FaTractor, FaUser } from 'react-icons/fa';
+import { FaAngleDoubleLeft, FaDna, FaFlask, FaHome, FaMapMarkerAlt, FaSeedling, FaTractor, FaUser } from 'react-icons/fa';
 
 interface NavItemProps {
   href: string;
@@ -88,6 +88,13 @@ export function MainLayout({ children }: { children: React.ReactNode }) {
             label="Insumos"
             isCollapsed={isCollapsed}
             isActive={pathname === "/inputs/list"}
+          />
+          <NavItem
+            href="/varieties/list"
+            icon={<FaDna className="h-5 w-5" />}
+            label="Variedades"
+            isCollapsed={isCollapsed}
+            isActive={pathname === "/varieties/list"}
           />
           <NavItem
             href="/plantings/list"
