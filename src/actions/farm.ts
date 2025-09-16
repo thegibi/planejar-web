@@ -73,3 +73,12 @@ export async function updateFarm(farmId: number, formData: FormData) {
   revalidatePath('/farms/list');
   redirect('/farms/list');
 }
+
+export async function getFarmById(id: number) {
+  return await prisma.farm.findUnique({
+    where: { id },
+    include: {
+      plots: true
+    }
+  });
+}
