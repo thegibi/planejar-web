@@ -1,5 +1,6 @@
 'use client';
 
+import { FarmDetailsSkeleton } from '@/components/farm-details-skeleton';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import Link from 'next/link';
@@ -158,11 +159,7 @@ export default function FarmDetailsPage({ params }: FarmDetailsProps) {
   };
 
   if (loading) {
-    return (
-      <div className="container mx-auto mt-10 p-4">
-        <div className="text-center">Carregando detalhes da fazenda...</div>
-      </div>
-    );
+    return <FarmDetailsSkeleton />;
   }
 
   if (!farm) {
