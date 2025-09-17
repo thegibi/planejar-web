@@ -41,6 +41,32 @@
   --radius-md: calc(var(--radius) - 2px);
   --radius-lg: var(--radius);
   --radius-xl: calc(var(--radius) + 4px);
+  
+  /* Paleta Verde Planejar - baseada em #3C7736 (600) */
+  --color-green-50: #f0f9f0;
+  --color-green-100: #dcf2dc;
+  --color-green-200: #bce5bc;
+  --color-green-300: #8dd58d;
+  --color-green-400: #5bbf5b;
+  --color-green-500: #4ba94b;
+  --color-green-600: #3c7736;
+  --color-green-700: #2f5d2a;
+  --color-green-800: #274b23;
+  --color-green-900: #223e1f;
+  --color-green-950: #0f1f0e;
+  
+  /* Paleta Dourada Secundária - baseada em #DEC07A */
+  --color-amber-50: #fefbf3;
+  --color-amber-100: #fdf5e1;
+  --color-amber-200: #fae9c2;
+  --color-amber-300: #f6d89a;
+  --color-amber-400: #f1c265;
+  --color-amber-500: #eca93e;
+  --color-amber-600: #dec07a;
+  --color-amber-700: #b8935f;
+  --color-amber-800: #957651;
+  --color-amber-900: #7a6246;
+  --color-amber-950: #453824;
 }
 
 :root {

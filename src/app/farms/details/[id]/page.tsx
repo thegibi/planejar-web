@@ -177,6 +177,9 @@ export default function FarmDetailsPage({ params }: FarmDetailsProps) {
       <div className="flex justify-between items-center mb-6">
         <h1 className="text-3xl font-bold">Detalhes da Fazenda: <span className="capitalize">{farm.name.toLocaleLowerCase()}</span></h1>
         <div className="flex gap-2">
+          <Link href={`/farms/spray-sheet/${farm.id}`}>
+            <Button variant="outline">Planilha de Pulverização</Button>
+          </Link>
           <Link href={`/farms/edit/${farm.id}`}>
             <Button variant="outline">Editar Fazenda</Button>
           </Link>
