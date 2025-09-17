@@ -2,6 +2,7 @@ import { MainLayout } from "@/components/main-layout";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
+import { Analytics } from '@vercel/analytics/next';
 import "./globals.css";
 
 const geistSans = Geist({
@@ -37,6 +38,7 @@ export default function RootLayout({
               {children}
             </MainLayout>
           </TooltipProvider>
+          <Analytics />
       </body>
     </html>
   );
