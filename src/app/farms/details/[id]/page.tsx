@@ -2,15 +2,9 @@
 
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import {
-  ChartConfig,
-  ChartContainer,
-  ChartLegend,
-  ChartLegendContent,
-} from '@/components/ui/chart';
 import Link from 'next/link';
 import { useEffect, useState } from 'react';
-import { Pie, PieChart } from 'recharts';
+import { Cell, Legend, Pie, PieChart, ResponsiveContainer, Tooltip } from 'recharts';
 
 interface FarmDetailsProps {
   params: Promise<{ id: string }>;
@@ -52,6 +46,7 @@ interface VarietyData {
   percentage: number;
   color: string;
   fill: string;
+  [key: string]: any;
 }
 
 interface PlotData {
@@ -60,6 +55,7 @@ interface PlotData {
   percentage: number;
   color: string;
   fill: string;
+  [key: string]: any;
 }
 
 const COLORS = ['#0088FE', '#00C49F', '#FFBB28', '#FF8042', '#8884D8', '#82CA9D', '#FFC658', '#FF7C7C'];
@@ -121,7 +117,7 @@ export default function FarmDetailsPage({ params }: FarmDetailsProps) {
       area: Number(area.toFixed(2)),
       percentage: Number(((area / totalArea) * 100).toFixed(1)),
       color: COLORS[index % COLORS.length],
-      fill: `var(--color-variety-${index})`
+      fill: COLORS[index % COLORS.length]
     }));
 
     setVarietyData(data);
@@ -143,39 +139,23 @@ export default function FarmDetailsPage({ params }: FarmDetailsProps) {
       area: Number(area.toFixed(2)),
       percentage: Number(((area / totalArea) * 100).toFixed(1)),
       color: COLORS[index % COLORS.length],
-      fill: `var(--color-plot-${index})`
+      fill: COLORS[index % COLORS.length]
     }));
 
     setPlotData(data);
   };
 
-  // Configuração para o chart de variedades
   const varietyChartConfig = {
     area: {
-      label: "Área (ha)",
+      label: "Área",
     },
-    ...varietyData.reduce((config, variety, index) => {
-      config[`variety-${index}`] = {
-        label: variety.name,
-        color: COLORS[index % COLORS.length],
-      };
-      return config;
-    }, {} as Record<string, any>)
-  } satisfies ChartConfig;
+  };
 
-  // Configuração para o chart de talhões
   const plotChartConfig = {
     area: {
-      label: "Área (ha)",
+      label: "Área",
     },
-    ...plotData.reduce((config, plot, index) => {
-      config[`plot-${index}`] = {
-        label: plot.name,
-        color: COLORS[index % COLORS.length],
-      };
-      return config;
-    }, {} as Record<string, any>)
-  } satisfies ChartConfig;
+  };
 
   if (loading) {
     return (
@@ -198,7 +178,7 @@ export default function FarmDetailsPage({ params }: FarmDetailsProps) {
   return (
     <div className="container mx-auto mt-10 p-4">
       <div className="flex justify-between items-center mb-6">
-        <h1 className="text-3xl font-bold">Detalhes da Fazenda: {farm.name}</h1>
+        <h1 className="text-3xl font-bold">Detalhes da Fazenda: <span className="capitalize">{farm.name.toLocaleLowerCase()}</span></h1>
         <div className="flex gap-2">
           <Link href={`/farms/edit/${farm.id}`}>
             <Button variant="outline">Editar Fazenda</Button>
@@ -216,10 +196,10 @@ export default function FarmDetailsPage({ params }: FarmDetailsProps) {
         <CardContent>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
             <div>
-              <strong>Proprietário:</strong> {farm.owner.name}
+              <strong>Proprietário:</strong> <span className="capitalize">{farm.owner.name.toLocaleLowerCase()}</span>
             </div>
             <div>
-              <strong>Localização:</strong> {farm.location}
+              <strong >Localização:</strong> <span className="capitalize">{farm.location.toLocaleLowerCase()}</span>
             </div>
             <div>
               <strong>Área Total:</strong> {farm.area} ha
@@ -247,18 +227,24 @@ export default function FarmDetailsPage({ params }: FarmDetailsProps) {
           </CardHeader>
           <CardContent>
             {varietyData.length > 0 ? (
-              <ChartContainer
-                config={varietyChartConfig}
-                className="mx-auto aspect-square max-h-[300px]"
-              >
+              <ResponsiveContainer width="100%" height={300}>
                 <PieChart>
-                  <Pie data={varietyData} dataKey="area" />
-                  <ChartLegend
-                    content={<ChartLegendContent nameKey="name" />}
-                    className="-translate-y-2 flex-wrap gap-2 *:basis-1/4 *:justify-center"
+                  <Tooltip 
+                    formatter={(value: any, name: any, props: any) => [
+                      `${value} ha (${props.payload?.percentage}%)`,
+                      props.payload?.name
+                    ]}
+                  />
+                  <Pie data={varietyData} dataKey="area">
+                    {varietyData.map((entry, index) => (
+                      <Cell key={`cell-${index}`} fill={entry.fill} />
+                    ))}
+                  </Pie>
+                  <Legend 
+                    formatter={(value: any, entry: any) => entry.payload?.name}
                   />
                 </PieChart>
-              </ChartContainer>
+              </ResponsiveContainer>
             ) : (
               <div className="text-center text-gray-500 py-8">
                 Nenhum plantio encontrado para esta fazenda.
@@ -277,18 +263,24 @@ export default function FarmDetailsPage({ params }: FarmDetailsProps) {
           </CardHeader>
           <CardContent>
             {plotData.length > 0 ? (
-              <ChartContainer
-                config={plotChartConfig}
-                className="mx-auto aspect-square max-h-[300px]"
-              >
+              <ResponsiveContainer width="100%" height={300}>
                 <PieChart>
-                  <Pie data={plotData} dataKey="area" />
-                  <ChartLegend
-                    content={<ChartLegendContent nameKey="name" />}
-                    className="-translate-y-2 flex-wrap gap-2 *:basis-1/4 *:justify-center"
+                  <Tooltip 
+                    formatter={(value: any, name: any, props: any) => [
+                      `${value} ha (${props.payload?.percentage}%)`,
+                      props.payload?.name
+                    ]}
+                  />
+                  <Pie data={plotData} dataKey="area">
+                    {plotData.map((entry, index) => (
+                      <Cell key={`cell-${index}`} fill={entry.fill} />
+                    ))}
+                  </Pie>
+                  <Legend 
+                    formatter={(value: any, entry: any) => entry.payload?.name}
                   />
                 </PieChart>
-              </ChartContainer>
+              </ResponsiveContainer>
             ) : (
               <div className="text-center text-gray-500 py-8">
                 Nenhum talhão plantado encontrado para esta fazenda.
