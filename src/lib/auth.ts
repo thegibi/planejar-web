@@ -55,6 +55,7 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
   ],
   session: {
     strategy: "jwt",
+    maxAge: 24 * 60 * 60, // 24 horas
   },
   pages: {
     signIn: "/auth/signin",
@@ -75,5 +76,20 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
       return session;
     },
   },
+  cookies: {
+    sessionToken: {
+      name: process.env.NODE_ENV === 'production'
+        ? '__Secure-next-auth.session-token'
+        : 'next-auth.session-token',
+      options: {
+        httpOnly: true,
+        sameSite: 'lax',
+        path: '/',
+        secure: process.env.NODE_ENV === 'production',
+        domain: process.env.NODE_ENV === 'production' ? '.planejar.app' : undefined
+      },
+    },
+  },
   secret: process.env.NEXTAUTH_SECRET,
+  debug: process.env.NODE_ENV === 'development',
 });
