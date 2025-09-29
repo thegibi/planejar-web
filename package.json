@@ -8,7 +8,9 @@
     "start": "next start",
     "lint": "eslint",
     "postinstall": "prisma generate --no-engine",
-    "seed": "tsx ./prisma/seed.ts"
+    "seed": "tsx ./prisma/seed.ts",
+    "seed:admin": "node scripts/seed-production-admin.js",
+    "verify:admin": "node scripts/verify-production-admin.js"
   },
   "dependencies": {
     "@hookform/resolvers": "^5.2.1",
