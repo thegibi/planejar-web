@@ -1,4 +1,3 @@
-// Script para deletar variedades específicas
 import { PrismaClient } from '../lib/generated/prisma-client/index.js';
 
 const prisma = new PrismaClient();

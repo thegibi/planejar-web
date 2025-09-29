@@ -1,4 +1,3 @@
-// Script para listar todas as variedades
 import { PrismaClient } from '../lib/generated/prisma-client/index.js';
 
 const prisma = new PrismaClient();

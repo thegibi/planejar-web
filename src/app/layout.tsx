@@ -1,8 +1,9 @@
-import { MainLayout } from "@/components/main-layout";
+import { ConditionalLayout } from "@/components/conditional-layout";
+import SessionProvider from "@/components/providers/session-provider";
 import { TooltipProvider } from "@/components/ui/tooltip";
+import { Analytics } from '@vercel/analytics/next';
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
-import { Analytics } from '@vercel/analytics/next';
 import "./globals.css";
 
 const geistSans = Geist({
@@ -33,12 +34,14 @@ export default function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
+        <SessionProvider>
           <TooltipProvider>
-            <MainLayout>
+            <ConditionalLayout>
               {children}
-            </MainLayout>
+            </ConditionalLayout>
           </TooltipProvider>
-          <Analytics />
+        </SessionProvider>
+        <Analytics />
       </body>
     </html>
   );

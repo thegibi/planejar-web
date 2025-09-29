@@ -3,10 +3,11 @@
 import { Button } from '@/components/ui/button';
 import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip';
 import { cn } from '@/lib/utils';
+import { signOut, useSession } from 'next-auth/react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { useState } from 'react';
-import { FaAngleDoubleLeft, FaDna, FaFlask, FaHome, FaMapMarkerAlt, FaSeedling, FaTractor, FaUser } from 'react-icons/fa';
+import { FaAngleDoubleLeft, FaDna, FaFlask, FaMapMarkerAlt, FaSeedling, FaSignOutAlt, FaTachometerAlt, FaTractor, FaUser } from 'react-icons/fa';
 
 interface NavItemProps {
   href: string;
@@ -40,8 +41,13 @@ const NavItem: React.FC<NavItemProps> = ({ href, icon, label, isCollapsed, isAct
 export function MainLayout({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
   const [isCollapsed, setIsCollapsed] = useState(false);
+  const { data: session, status } = useSession();
   const sidebarWidth = isCollapsed ? 'w-[70px]' : 'w-[256px]';
   const paddingLeft = isCollapsed ? 'pl-[94px]' : 'pl-[280px]';
+
+  const handleLogout = () => {
+    signOut({ callbackUrl: '/auth/signin' });
+  };
 
   return (
     <div className="flex">
@@ -55,11 +61,11 @@ export function MainLayout({ children }: { children: React.ReactNode }) {
         
         <nav className="flex flex-col space-y-2">
           <NavItem
-            href="/"
-            icon={<FaHome className="h-5 w-5" />}
-            label="Home"
+            href="/dashboard"
+            icon={<FaTachometerAlt className="h-5 w-5" />}
+            label="Painel"
             isCollapsed={isCollapsed}
-            isActive={pathname === "/"}
+            isActive={pathname === "/dashboard"}
           />
           <NavItem
             href="/clients/list"
@@ -104,6 +110,44 @@ export function MainLayout({ children }: { children: React.ReactNode }) {
             isActive={pathname === "/plantings/list"}
           />
         </nav>
+
+        {/* Informações do usuário e logout */}
+        <div className="mt-auto">
+          {session?.user && (
+            <div className="border-t pt-4">
+              {!isCollapsed && (
+                <div className="mb-2 px-2">
+                  <p className="text-sm font-medium text-gray-900 truncate">
+                    {session.user.name}
+                  </p>
+                  <p className="text-xs text-gray-500 truncate">
+                    {session.user.email}
+                  </p>
+                </div>
+              )}
+              
+              <Tooltip>
+                <TooltipTrigger asChild>
+                  <Button
+                    variant="ghost"
+                    size={isCollapsed ? "icon" : "sm"}
+                    className={cn(
+                      "w-full justify-start text-gray-600 hover:text-gray-900 hover:bg-gray-100",
+                      isCollapsed && "justify-center"
+                    )}
+                    onClick={handleLogout}
+                  >
+                    <FaSignOutAlt className="h-4 w-4" />
+                    {!isCollapsed && <span className="ml-2">Sair</span>}
+                  </Button>
+                </TooltipTrigger>
+                <TooltipContent side="right" hidden={!isCollapsed}>
+                  <p>Sair</p>
+                </TooltipContent>
+              </Tooltip>
+            </div>
+          )}
+        </div>
       </aside>
 
       {/* Conteúdo Principal */}
