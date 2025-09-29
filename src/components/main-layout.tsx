@@ -7,7 +7,7 @@ import { signOut, useSession } from 'next-auth/react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { useState } from 'react';
-import { FaAngleDoubleLeft, FaDna, FaFlask, FaMapMarkerAlt, FaSeedling, FaSignOutAlt, FaTachometerAlt, FaTractor, FaUser } from 'react-icons/fa';
+import { FaAngleDoubleLeft, FaDashcube, FaDna, FaFlask, FaMapMarkerAlt, FaSeedling, FaSignOutAlt, FaTractor, FaUser } from 'react-icons/fa';
 
 interface NavItemProps {
   href: string;
@@ -62,8 +62,8 @@ export function MainLayout({ children }: { children: React.ReactNode }) {
         <nav className="flex flex-col space-y-2">
           <NavItem
             href="/dashboard"
-            icon={<FaTachometerAlt className="h-5 w-5" />}
-            label="Painel"
+            icon={<FaDashcube className="h-5 w-5" />}
+            label="Visão Geral"
             isCollapsed={isCollapsed}
             isActive={pathname === "/dashboard"}
           />
