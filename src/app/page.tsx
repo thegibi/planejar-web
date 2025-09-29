@@ -6,7 +6,7 @@ import { useSession } from 'next-auth/react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { useEffect } from 'react';
-import { FaLeaf, FaSeedling, FaTractor } from 'react-icons/fa';
+import { FaFlask, FaLeaf, FaSeedling, FaTractor } from 'react-icons/fa';
 
 export default function HomePage() {
   const { data: session, status } = useSession();
@@ -118,7 +118,7 @@ export default function HomePage() {
 
             <Card className="text-center">
               <CardHeader>
-                <FaLeaf className="h-12 w-12 text-green-600 mx-auto mb-4" />
+                <FaFlask className="h-12 w-12 text-green-600 mx-auto mb-4" />
                 <CardTitle>Gestão de Insumos</CardTitle>
                 <CardDescription>
                   Controle total de fertilizantes, defensivos e custos
