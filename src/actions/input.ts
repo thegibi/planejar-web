@@ -76,3 +76,28 @@ export async function updateInput(id: number, formData: FormData) {
   revalidatePath('/inputs/list');
   redirect('/inputs/list');
 }
+
+export async function deleteInput(id: number) {
+  try
+  {
+    await prisma.input.delete({
+      where: { id: id },
+    });
+    console.log(`Insumo ${id} deletado com sucesso!`);
+
+    revalidatePath('/inputs/list');
+
+    return {
+      success: true,
+      message: 'Insumo excluído com sucesso!'
+    };
+  } catch (error)
+  {
+    console.error('Erro ao deletar insumo:', error);
+
+    return {
+      success: false,
+      message: 'Erro ao excluir o insumo. Verifique se não há dados relacionados.'
+    };
+  }
+}

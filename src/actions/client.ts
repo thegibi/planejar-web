@@ -72,3 +72,28 @@ export async function updateClient(id: number, formData: FormData) {
   revalidatePath('/clients/list');
   redirect('/clients/list');
 }
+
+export async function deleteClient(id: number) {
+  try
+  {
+    await prisma.client.delete({
+      where: { id: id },
+    });
+    console.log(`Cliente ${id} deletado com sucesso!`);
+
+    revalidatePath('/clients/list');
+
+    return {
+      success: true,
+      message: 'Cliente excluído com sucesso!'
+    };
+  } catch (error)
+  {
+    console.error('Erro ao deletar cliente:', error);
+
+    return {
+      success: false,
+      message: 'Erro ao excluir o cliente. Verifique se não há dados relacionados.'
+    };
+  }
+}

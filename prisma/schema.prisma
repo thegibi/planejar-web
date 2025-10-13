@@ -1,6 +1,6 @@
 datasource db {
   provider = "postgresql"
-  url      = "prisma+postgres://accelerate.prisma-data.net/?api_key=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJqd3RfaWQiOjEsInNlY3VyZV9rZXkiOiJza19wSFdKOEs5SFpxcTlCY1d3NzQ3a0siLCJhcGlfa2V5IjoiMDFLM0NHRFpKUDBEUFRZU0VINTFCOTZQSFMiLCJ0ZW5hbnRfaWQiOiI3YjY2YTQ2ZjJlODg0MTJkYzlkZjIxMWI1MDVmZDY5ZmZmZmU0M2VjMTJmM2RhODRiMzM0MzE0MDAzOGMxNjBmIiwiaW50ZXJuYWxfc2VjcmV0IjoiYzIzZmQ3YTYtMTE0My00NDVjLTk0NWMtYjc5Yzk5ZTMyYjNlIn0.QPJcrz3sLrX1W8VK2i8823iKkA5IcGLftRBpc-T9Hk8"
+  url      = env("DATABASE_URL")
 }
 
 generator client {
@@ -29,7 +29,8 @@ model Farm {
   
   plots              Plot[]
   inputs             Input[] 
-  plantings Planting[]
+  plantings          Planting[]
+  applications       Application[]
 }
 
 model Input {
@@ -66,22 +67,39 @@ model Planting {
   farmId          Int
   
   plots           Plot[] 
+  applications    Application[] 
 }
 
 model Variety {
   id     Int    @id @default(autoincrement())
   name   String @unique
-  cycle  Int    // ciclo em dias
+  cycle  Int  
 }
 
-// Models para NextAuth.js
+model Application {
+  id              Int      @id @default(autoincrement())
+  applicationDate DateTime
+  plotIds         Int[]   
+  inputIds        Int[]   
+  observations    String? 
+  
+  farm            Farm     @relation(fields: [farmId], references: [id])
+  farmId          Int
+  
+  planting        Planting @relation(fields: [plantingId], references: [id])
+  plantingId      Int
+  
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+}
+
 model User {
   id            String    @id @default(cuid())
   name          String?
   email         String    @unique
   emailVerified DateTime?
   image         String?
-  password      String?   // Para login com email/senha
+  password      String?   
   accounts      Account[]
   sessions      Session[]
  

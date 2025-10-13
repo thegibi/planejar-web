@@ -1,3 +1,4 @@
+import { BackButton } from '@/components/back-button';
 import { Button } from '@/components/ui/button';
 import { Table, TableBody, TableCaption, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import prisma from '@/lib/prisma';
@@ -37,10 +38,11 @@ export default async function PlotsByFarmPage(props: PageProps<'/farms/[id]/plot
   const totalArea = plots.reduce((sum, plot) => sum + plot.area, 0) || 0;
 
   return (
-    <div className="container mx-auto py-10">
-        <h1 className="text-2xl">Talhões da Fazenda: <strong className='font-bold'>{farm.name}</strong></h1>
-        <p className="text-xl mb-4">Área Total dos Talhões: <strong className='font-bold'>{totalArea.toFixed(2)} (ha)</strong></p>
-      <div className="flex justify-end mb-4">
+    <div className="py-10">
+        <h1 className="text-2xl text-green-600">Talhões da Fazenda: <strong className='font-bold'>{farm.name}</strong></h1>
+        <p className="text-xl mb-4 text-green-600">Área Total dos Talhões: <strong className='font-bold'>{totalArea.toFixed(2)} (ha)</strong></p>
+      <div className="flex gap-4 justify-end mb-4">
+        <BackButton />
         <Link href="/plots/create">
           <Button>Cadastrar Talhão</Button>
         </Link>

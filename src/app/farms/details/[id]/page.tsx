@@ -175,16 +175,16 @@ export default function FarmDetailsPage({ params }: FarmDetailsProps) {
   return (
     <div className="container mx-auto mt-10 p-4">
       <div className="flex justify-between items-center mb-6">
-        <h1 className="text-3xl font-bold">Detalhes da Fazenda: <span className="capitalize">{farm.name.toLocaleLowerCase()}</span></h1>
+        <h1 className="text-3xl font-bold text-green-600">Detalhes da Fazenda: <span className="capitalize">{farm.name.toLocaleLowerCase()}</span></h1>
         <div className="flex gap-2">
-          <Link href={`/farms/spray-sheet/${farm.id}`}>
-            <Button variant="outline">Planilha de Pulverização</Button>
+          <Link href={`/farms/applications/create/${farm.id}`}>
+            <Button variant="default">Cadastrar Aplicações</Button>
           </Link>
-          <Link href={`/farms/edit/${farm.id}`}>
-            <Button variant="outline">Editar Fazenda</Button>
+          <Link href={`/farms/${farm.id}/plots`}>
+            <Button variant="outline">Ver Talhões</Button>
           </Link>
           <Link href="/farms/list">
-            <Button variant="outline">Voltar à Lista</Button>
+            <Button variant="outline">Voltar</Button>
           </Link>
         </div>
       </div>

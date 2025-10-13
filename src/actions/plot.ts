@@ -1,11 +1,11 @@
+'use server';
+
 import prisma from "@/lib/prisma";
 import { plotSchema } from "@/validations/plot";
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 
 export async function createPlot(formData: FormData) {
-  'use server';
-
   const rawFormData = {
     name: formData.get('name'),
     area: formData.get('area'),
@@ -37,8 +37,6 @@ export async function createPlot(formData: FormData) {
 }
 
 export async function updatePlot(id: number, formData: FormData) {
-  'use server';
-
   const rawFormData = {
     name: formData.get('name'),
     area: formData.get('area'),
@@ -73,4 +71,29 @@ export async function updatePlot(id: number, formData: FormData) {
 
   revalidatePath('/plots');
   redirect('/plots');
+}
+
+export async function deletePlot(id: number) {
+  try
+  {
+    await prisma.plot.delete({
+      where: { id: id },
+    });
+    console.log(`Talhão ${id} deletado com sucesso!`);
+
+    revalidatePath('/plots/list');
+
+    return {
+      success: true,
+      message: 'Talhão excluído com sucesso!'
+    };
+  } catch (error)
+  {
+    console.error('Erro ao deletar talhão:', error);
+
+    return {
+      success: false,
+      message: 'Erro ao excluir o talhão. Verifique se não há dados relacionados.'
+    };
+  }
 }

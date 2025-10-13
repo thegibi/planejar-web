@@ -5,6 +5,7 @@ import { Analytics } from '@vercel/analytics/next';
 import { SpeedInsights } from "@vercel/speed-insights/next";
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
+import { Toaster } from 'sonner';
 import "./globals.css";
 
 const geistSans = Geist({
@@ -41,6 +42,16 @@ export default function RootLayout({
               {children}
             </ConditionalLayout>
           </TooltipProvider>
+          <Toaster 
+            position="top-right"
+            toastOptions={{
+              style: {
+                background: 'white',
+                border: '1px solid #e5e7eb',
+                color: '#374151',
+              },
+            }}
+          />
         </SessionProvider>
         <Analytics />
         <SpeedInsights />

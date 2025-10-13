@@ -1,4 +1,5 @@
 import { createClient } from '@/actions/client';
+import { BackButton } from '@/components/back-button';
 import { SubmitButton } from '@/components/submit-button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -20,7 +21,10 @@ export default function CreateClientPage() {
           <Label className='mb-2' htmlFor="email">Email</Label>
           <Input id="email" name="email" type="email" placeholder="email@exemplo.com" />
         </div>
-        <SubmitButton />
+        <div className='flex justify-between'>
+          <BackButton />
+          <SubmitButton />
+        </div>
       </form>
     </div>
   );

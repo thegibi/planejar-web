@@ -20,19 +20,24 @@ interface NavItemProps {
 const NavItem: React.FC<NavItemProps> = ({ href, icon, label, isCollapsed, isActive}) => (
   <Tooltip>
     <TooltipTrigger asChild>
-      <Link href={href} className={cn("flex items-center w-full p-2 rounded-md transition-color hover:bg-transparent", 
+      <Link href={href} className={cn("flex items-center w-full p-2 rounded-md transition-colors hover:bg-transparent", 
         !isCollapsed && "hover:bg-gray-100")}>
-        <div className={cn("flex items-center justify-center", isActive ? "text-gray-900" : "text-gray-600")}>
+        <div className={cn("flex items-center justify-center", isActive ? "text-green-600" : "text-gray-600")}>
           {icon}
         </div>
         <span className={cn("ml-4 whitespace-nowrap overflow-hidden transition-all", 
           isCollapsed ? "w-0 opacity-0" : "w-auto opacity-100", 
-          isActive ? "font-semibold text-gray-900" : "text-gray-600")}>
+          isActive ? "font-semibold text-green-600" : "text-gray-600")}>
           {label}
         </span>
       </Link>
     </TooltipTrigger>
-    <TooltipContent side="right" hidden={!isCollapsed}>
+    <TooltipContent 
+      side="right" 
+      hidden={!isCollapsed}
+      className="bg-green-600 text-white"
+      arrowClassName="bg-green-600 fill-green-600"
+    >
       <p>{label}</p>
     </TooltipContent>
   </Tooltip>
@@ -51,7 +56,6 @@ export function MainLayout({ children }: { children: React.ReactNode }) {
 
   return (
     <div className="flex">
-      {/* Sidebar */}
       <aside className={cn("bg-white shadow-sm flex flex-col fixed top-0 left-0 h-full p-4 transition-all duration-300", sidebarWidth)}>
         <div className="flex justify-end mb-4">
           <Button variant="ghost" size="icon" onClick={() => setIsCollapsed(!isCollapsed)}>
@@ -141,7 +145,7 @@ export function MainLayout({ children }: { children: React.ReactNode }) {
                     {!isCollapsed && <span className="ml-2">Sair</span>}
                   </Button>
                 </TooltipTrigger>
-                <TooltipContent side="right" hidden={!isCollapsed}>
+                <TooltipContent side="right" hidden={!isCollapsed} className="bg-green-600 text-white" arrowClassName="bg-green-600 fill-green-600">
                   <p>Sair</p>
                 </TooltipContent>
               </Tooltip>

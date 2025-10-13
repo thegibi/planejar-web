@@ -82,3 +82,19 @@ export async function getFarmById(id: number) {
     }
   });
 }
+
+export async function deleteFarm(id: number) {
+  try
+  {
+    await prisma.farm.delete({
+      where: { id: id },
+    });
+    console.log(`Fazenda ${id} deletada com sucesso!`);
+  } catch (error)
+  {
+    console.error('Erro ao deletar fazenda:', error);
+    throw error;
+  }
+
+  revalidatePath('/farms/list');
+}

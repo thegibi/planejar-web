@@ -1,25 +1,71 @@
+import { BackButton } from '@/components/back-button';
+import { DeletePlotButton } from '@/components/delete-plot-button';
+import { EditPlotButton } from '@/components/edit-plot-button';
+import Pagination from '@/components/pagination';
+import PlotSearch from '@/components/plot-search';
 import { Button } from '@/components/ui/button';
 import { Table, TableBody, TableCaption, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
-import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip';
 import prisma from '@/lib/prisma';
 import Link from 'next/link';
-import { FaPencilAlt } from 'react-icons/fa';
 
+const ITEMS_PER_PAGE = 20;
 
-export default async function PlotsPage() {
-  const plots = await prisma.plot.findMany({
-    include: {
-      farm: true,
-    },
-  });
+export default async function PlotsPage({ searchParams }: {
+ searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
+}) {
+  const currentPage = Number((await searchParams).page) || 1;
+  const searchTerm = (await searchParams).search?.toString() || '';
+  const skip = (currentPage - 1) * ITEMS_PER_PAGE;
+
+  const whereClause = searchTerm ? {
+    OR: [
+      {
+        name: {
+          contains: searchTerm,
+          mode: 'insensitive' as const,
+        },
+      },
+      {
+        farm: {
+          name: {
+            contains: searchTerm,
+            mode: 'insensitive' as const,
+          },
+        },
+      },
+    ],
+  } : {};
+
+  const [plots, totalCount] = await Promise.all([
+    prisma.plot.findMany({
+      where: whereClause,
+      skip,
+      take: ITEMS_PER_PAGE,
+      orderBy: { id: 'asc' },
+      include: {
+        farm: true,
+      },
+    }),
+    prisma.plot.count({
+      where: whereClause,
+    }),
+  ]);
+
+  const totalPages = Math.ceil(totalCount / ITEMS_PER_PAGE);
 
   return (
     <div className="py-10">
-      <h1 className="text-2xl font-bold">Tabela de Talhões</h1>
-      <div className="flex justify-end mb-6">
-        <Link href="/plots/create">
-          <Button>Cadastrar Talhão</Button>
-        </Link>
+      <h1 className="text-2xl font-bold text-green-600">Tabela de Talhões</h1>
+      <div className="flex items-center gap-6 my-6">
+        <div className="flex-1">
+          <PlotSearch />
+        </div>
+        <div className="flex gap-3 flex-shrink-0">
+          <BackButton />
+          <Link href="/plots/create">
+            <Button variant="default">Cadastrar Talhão</Button>
+          </Link>
+        </div>
       </div>
 
       {plots.length > 0 ? (
@@ -30,7 +76,7 @@ export default async function PlotsPage() {
               <TableHead>Nome</TableHead>
               <TableHead>Área (ha)</TableHead>
               <TableHead>Fazenda</TableHead>
-               <TableHead className="text-right">Editar</TableHead>
+               <TableHead className="text-right">Ações</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
@@ -40,18 +86,10 @@ export default async function PlotsPage() {
                 <TableCell>{plot.area}</TableCell>
                 <TableCell className='capitalize'>{plot.farm.name}</TableCell>
                 <TableCell className="text-right">
-                  <Tooltip>
-                    <TooltipTrigger asChild>
-                      <Link href={`/plots/edit/${plot.id}`}>
-                        <Button variant="outline" size="icon">
-                          <FaPencilAlt className="h-4 w-4" />
-                        </Button>
-                      </Link>
-                    </TooltipTrigger>
-                    <TooltipContent>
-                      <p>Editar Talhão</p>
-                    </TooltipContent>
-                  </Tooltip>
+                  <div className="flex gap-2 justify-end">
+                    <EditPlotButton plotId={plot.id} />
+                    <DeletePlotButton plotId={plot.id} plotName={plot.name} />
+                  </div>
                 </TableCell>
               </TableRow>
             ))}
@@ -60,6 +98,10 @@ export default async function PlotsPage() {
       ) : (
         <p className="text-center text-gray-500">Nenhum talhão cadastrado ainda.</p>
       )}
+
+       <div className="mt-8">
+        <Pagination totalPages={totalPages} currentPage={currentPage} />
+      </div>
     </div>
   );
 }

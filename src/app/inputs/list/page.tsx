@@ -1,9 +1,11 @@
+import { DeleteInputButton } from '@/components/delete-input-button';
+import { EditInputButton } from '@/components/edit-input-button';
+import InputSearch from '@/components/input-search';
 import Pagination from '@/components/pagination';
 import { Button } from '@/components/ui/button';
 import { Table, TableBody, TableCaption, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import prisma from '@/lib/prisma';
 import Link from 'next/link';
-import { FaPencilAlt } from 'react-icons/fa';
 
 const ITEMS_PER_PAGE = 20;
 
@@ -11,26 +13,54 @@ export default async function InputsPage({ searchParams }: {
  searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
 }) {
   const currentPage = Number((await searchParams).page) || 1;
+  const searchTerm = (await searchParams).search?.toString() || '';
   const skip = (currentPage - 1) * ITEMS_PER_PAGE;
+
+  const whereCondition = searchTerm
+    ? {
+        OR: [
+          {
+            class: {
+              contains: searchTerm,
+              mode: 'insensitive' as const,
+            },
+          },
+          {
+            commercialBrand: {
+              contains: searchTerm,
+              mode: 'insensitive' as const,
+            },
+          },
+        ],
+      }
+    : {};
 
   const [inputs, totalCount] = await Promise.all([
     prisma.input.findMany({
+      where: whereCondition,
       skip,
       take: ITEMS_PER_PAGE,
       orderBy: { id: 'asc' },
     }),
-    prisma.input.count(),
+    prisma.input.count({
+      where: whereCondition,
+    }),
   ]);
 
   const totalPages = Math.ceil(totalCount / ITEMS_PER_PAGE);
 
   return (
     <div className="py-10">
-        <h1 className="text-2xl font-bold">Tabela de Insumos</h1>
-      <div className="flex justify-end mb-6">
-        <Link href="/inputs/create">
-          <Button>Cadastrar Insumo</Button>
-        </Link>
+      <h1 className="text-2xl font-bold text-green-600">Tabela de Insumos</h1>
+      <div className="flex items-center gap-4 my-6">
+        <div className="flex-1">
+          <InputSearch />
+        </div>
+        <div className="flex-shrink-0">
+          <Link href="/inputs/create">
+            <Button variant="default">Cadastrar Insumo</Button>
+          </Link>
+        </div>
       </div>
 
       {inputs.length > 0 ? (
@@ -42,22 +72,21 @@ export default async function InputsPage({ searchParams }: {
               <TableHead>Marca Comercial</TableHead>
               <TableHead>Ingrediente Ativo</TableHead>
               <TableHead>Unidade de Medida (kg/lt)</TableHead>
-              <TableHead>Ações</TableHead>
+              <TableHead className='text-right'>Ações</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
             {inputs.map((input) => (
               <TableRow key={input.id} className="even:bg-gray-50">
-                <TableCell className='capitalize'>{input.class}</TableCell>
-                <TableCell className='uppercase'>{input.commercialBrand.toLocaleUpperCase()}</TableCell>
-                <TableCell className='capitalize'>{input.activeIngredient}</TableCell>
-                <TableCell className='capitalize'>{input.unitOfMeasure.toLocaleLowerCase()}</TableCell>
+                <TableCell className='capitalize'>{input.class.toLowerCase()}</TableCell>
+                <TableCell className='uppercase'>{input.commercialBrand.toUpperCase()}</TableCell>
+                <TableCell className='capitalize'>{input.activeIngredient.toLowerCase()}</TableCell>
+                <TableCell className='capitalize'>{input.unitOfMeasure.toLowerCase()}</TableCell>
                 <TableCell className='text-right'>
-                  <Link href={`/inputs/edit/${input.id}`}>
-                    <Button variant="outline" size="icon">
-                      <FaPencilAlt className="h-4 w-4" />
-                    </Button>
-                  </Link>
+                  <div className="flex gap-2 justify-end">
+                    <EditInputButton inputId={input.id} />
+                    <DeleteInputButton inputId={input.id} inputName={input.commercialBrand} />
+                  </div>
                 </TableCell>
               </TableRow>
             ))}
