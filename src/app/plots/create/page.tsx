@@ -10,7 +10,7 @@ export default async function CreatePlotPage() {
 
   return (
     <div className="container mx-auto mt-10 p-4 max-w-lg">
-      <h1 className="text-2xl font-bold mb-4 text-green-600">Cadastrar Novo Talhão</h1>
+      <h1 className="text-2xl font-bold mb-4 text-green-600">Cadastrar Talhão</h1>
 
       <form action={createPlot} className="space-y-5">
         <div>

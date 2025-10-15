@@ -1,14 +1,13 @@
 import { BackButton } from '@/components/back-button';
 import { DeleteFarmButton } from '@/components/delete-farm-button';
+import { DetailsFarmButton } from '@/components/details-farm-button';
 import { EditFarmButton } from '@/components/edit-farm-button';
 import FarmSearch from '@/components/farm-search';
 import Pagination from '@/components/pagination';
 import { Button } from '@/components/ui/button';
 import { Table, TableBody, TableCaption, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
-import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip';
 import prisma from '@/lib/prisma';
 import Link from 'next/link';
-import { FaInfoCircle } from 'react-icons/fa';
 
 const ITEMS_PER_PAGE = 20;
 
@@ -19,7 +18,6 @@ export default async function FarmsPage({ searchParams }: {
   const searchTerm = (await searchParams).search?.toString() || '';
   const skip = (currentPage - 1) * ITEMS_PER_PAGE;
 
-  // Configurar filtros de busca
   const whereClause = searchTerm ? {
     OR: [
       {
@@ -98,18 +96,7 @@ export default async function FarmsPage({ searchParams }: {
                 <TableCell>{farm.fertilizerSpreader || <span className="text-gray-500">N/A</span>}</TableCell>
                 <TableCell className='capitalize'>{farm.location.toLocaleLowerCase()}</TableCell>
                 <TableCell>
-                  <Tooltip>
-                    <TooltipTrigger asChild>
-                      <Link href={`/farms/details/${farm.id}`}>
-                        <Button variant="outline" size="icon">
-                          <FaInfoCircle className="h-4 w-4" />
-                        </Button>
-                      </Link>
-                    </TooltipTrigger>
-                    <TooltipContent className="bg-green-600 text-white" arrowClassName="bg-green-600 fill-green-600">
-                      <p>Ver Detalhes</p>
-                    </TooltipContent>
-                  </Tooltip>
+                  <DetailsFarmButton farmId={farm.id} />
                 </TableCell>
                 <TableCell className="text-right">
                   <div className="flex gap-2 justify-end">

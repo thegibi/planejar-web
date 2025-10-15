@@ -1,4 +1,5 @@
 import { updateVariety } from '@/actions/variety';
+import { BackButton } from '@/components/back-button';
 import { SubmitButton } from '@/components/submit-button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -26,7 +27,7 @@ export default async function EditVarietyPage(
 
   return (
     <div className="container mx-auto mt-10 p-4 max-w-lg">
-      <h1 className="text-2xl font-bold mb-4">Editar Variedade: {variety.name}</h1>
+      <h1 className="text-2xl font-bold mb-4 text-green-600">Editar Variedade: {variety.name}</h1>
 
       <form action={updateVarietyWithId} className="space-y-5">
         <div>
@@ -53,8 +54,10 @@ export default async function EditVarietyPage(
             defaultValue={variety.cycle.toString()}
           />
         </div>
-
-        <SubmitButton />
+        <div className='flex justify-between'>
+          <BackButton />
+          <SubmitButton />
+        </div>
       </form>
     </div>
   );

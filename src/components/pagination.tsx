@@ -20,6 +20,63 @@ export default function Pagination({ totalPages, currentPage }: PaginationProps)
     return `${pathname}?${params.toString()}`;
   };
 
+  const renderPageNumbers = () => {
+    const pages = [];
+    
+    if (totalPages <= 7) {
+      // Se temos 7 ou menos páginas, mostra todas
+      for (let i = 1; i <= totalPages; i++) {
+        pages.push(
+          <Link key={i} href={createPageURL(i)} passHref>
+            <Button
+              variant={currentPage === i ? 'default' : 'outline'}
+              size="icon"
+            >
+              {i}
+            </Button>
+          </Link>
+        );
+      }
+    } else {
+      // Mostra os 3 primeiros
+      for (let i = 1; i <= 3; i++) {
+        pages.push(
+          <Link key={i} href={createPageURL(i)} passHref>
+            <Button
+              variant={currentPage === i ? 'default' : 'outline'}
+              size="icon"
+            >
+              {i}
+            </Button>
+          </Link>
+        );
+      }
+
+      // Adiciona três pontinhos
+      pages.push(
+        <span key="ellipsis" className="px-2 py-2 text-gray-500">
+          ...
+        </span>
+      );
+
+      // Mostra os 3 últimos
+      for (let i = totalPages - 2; i <= totalPages; i++) {
+        pages.push(
+          <Link key={i} href={createPageURL(i)} passHref>
+            <Button
+              variant={currentPage === i ? 'default' : 'outline'}
+              size="icon"
+            >
+              {i}
+            </Button>
+          </Link>
+        );
+      }
+    }
+
+    return pages;
+  };
+
   return (
     <div className="flex justify-center items-center space-x-2">
       <Link href={createPageURL(currentPage - 1)} passHref>
@@ -28,17 +85,8 @@ export default function Pagination({ totalPages, currentPage }: PaginationProps)
         </Button>
       </Link>
 
-      <div className="flex space-x-1">
-        {Array.from({ length: totalPages }, (_, i) => i + 1).map((page) => (
-          <Link key={page} href={createPageURL(page)} passHref>
-            <Button
-              variant={currentPage === page ? 'default' : 'outline'}
-              size="icon"
-            >
-              {page}
-            </Button>
-          </Link>
-        ))}
+      <div className="flex space-x-1 items-center">
+        {renderPageNumbers()}
       </div>
 
       <Link href={createPageURL(currentPage + 1)} passHref>

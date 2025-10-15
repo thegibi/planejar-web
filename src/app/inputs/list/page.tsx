@@ -1,3 +1,4 @@
+import { BackButton } from '@/components/back-button';
 import { DeleteInputButton } from '@/components/delete-input-button';
 import { EditInputButton } from '@/components/edit-input-button';
 import InputSearch from '@/components/input-search';
@@ -56,7 +57,8 @@ export default async function InputsPage({ searchParams }: {
         <div className="flex-1">
           <InputSearch />
         </div>
-        <div className="flex-shrink-0">
+        <div className="flex-shrink-0 flex gap-2">
+          <BackButton />
           <Link href="/inputs/create">
             <Button variant="default">Cadastrar Insumo</Button>
           </Link>

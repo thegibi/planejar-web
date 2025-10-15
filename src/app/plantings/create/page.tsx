@@ -1,8 +1,9 @@
 'use client';
 
 import { createPlanting, getFarmsWithPlots } from '@/actions/plantings';
+import { BackButton } from '@/components/back-button';
 import { MultiSelect } from "@/components/multi-select";
-import { Button } from '@/components/ui/button';
+import { SubmitButton } from '@/components/submit-button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { PlantingFormValues, plantingSchema } from '@/validations/plantings';
@@ -65,7 +66,7 @@ export default function CreatePlantingPage() {
 
   return (
     <div className="container mx-auto mt-10 p-4 max-w-lg">
-      <h1 className="text-2xl font-bold mb-4">Cadastrar Plantio</h1>
+      <h1 className="text-2xl font-bold mb-4 text-green-600">Cadastrar Plantio</h1>
       <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-5">
         <div>
           <Label className='mb-2' htmlFor="farmId">Fazenda</Label>
@@ -161,7 +162,10 @@ export default function CreatePlantingPage() {
           {form.formState.errors.plantingDate && <p className="text-red-500 text-sm mt-1">{form.formState.errors.plantingDate.message}</p>}
         </div>
 
-        <Button type="submit">Cadastrar Plantio</Button>
+         <div className='flex justify-between'>
+            <BackButton />  
+            <SubmitButton />
+          </div>
       </form>
     </div>
   );

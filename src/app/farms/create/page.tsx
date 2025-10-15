@@ -13,7 +13,7 @@ export default async function CreateFarmPage() {
 
   return (
     <div className="container mx-auto mt-10 p-4 max-w-lg">
-      <h1 className="text-2xl font-bold mb-4">Cadastrar Nova Fazenda</h1>
+      <h1 className="text-2xl font-bold mb-4 text-green-600">Cadastrar Fazenda</h1>
 
       <form action={createFarm} className="space-y-5">
         <div>

@@ -1,4 +1,5 @@
 import { updateInput } from '@/actions/input';
+import { BackButton } from '@/components/back-button';
 import { SubmitButton } from '@/components/submit-button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -26,7 +27,7 @@ export default async function EditClientPage(
 
   return (
     <div className="container mx-auto mt-10 p-4 max-w-lg">
-      <h1 className="text-2xl font-bold mb-4">Editar Insumo: {input.class}</h1>
+      <h1 className="text-2xl font-bold mb-4 text-green-600">Editar Insumo: {input.class}</h1>
 
       <form action={updateInputWithId} className="space-y-5">
        <div>
@@ -45,7 +46,10 @@ export default async function EditClientPage(
           <Label className='mb-2' htmlFor="unitOfMeasure">Unidade de Medida (kg/Lt)</Label>
           <Input id="unitOfMeasure" name="unitOfMeasure" type="text" placeholder="Ex: 1kg, 50Lt" required defaultValue={input.unitOfMeasure ?? ''} />
         </div>
-        <SubmitButton />
+        <div className='flex justify-between'>
+          <BackButton />
+          <SubmitButton />
+        </div>
       </form>
     </div>
   );

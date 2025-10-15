@@ -1,28 +1,90 @@
+import { BackButton } from '@/components/back-button';
+import { EditPlantingButton } from '@/components/edit-planting-button';
+import Pagination from '@/components/pagination';
+import PlantingSearch from '@/components/planting-search';
 import { Button } from '@/components/ui/button';
 import { Table, TableBody, TableCaption, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
-import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip';
 import prisma from '@/lib/prisma';
 import Link from 'next/link';
-import { FaPencilAlt } from 'react-icons/fa';
 
-export default async function PlantingsPage() {
-  const plantings = await prisma.planting.findMany({
-    include: {
-      farm: true,
-      plots: true,
-    },
-    orderBy: {
-      plantingDate: 'desc',
-    },
-  });
+const ITEMS_PER_PAGE = 20;
+
+export default async function PlantingsPage({ searchParams }: {
+ searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
+}) {
+  const currentPage = Number((await searchParams).page) || 1;
+  const searchTerm = (await searchParams).search?.toString() || '';
+  const skip = (currentPage - 1) * ITEMS_PER_PAGE;
+
+  const whereCondition = searchTerm
+    ? {
+        OR: [
+          {
+            crop: {
+              contains: searchTerm,
+              mode: 'insensitive' as const,
+            },
+          },
+          {
+            varieties: {
+              hasSome: [searchTerm],
+            },
+          },
+          {
+            farm: {
+              name: {
+                contains: searchTerm,
+                mode: 'insensitive' as const,
+              },
+            },
+          },
+          {
+            plots: {
+              some: {
+                name: {
+                  contains: searchTerm,
+                  mode: 'insensitive' as const,
+                },
+              },
+            },
+          },
+        ],
+      }
+    : {};
+
+  const [plantings, totalCount] = await Promise.all([
+    prisma.planting.findMany({
+      where: whereCondition,
+      skip,
+      take: ITEMS_PER_PAGE,
+      include: {
+        farm: true,
+        plots: true,
+      },
+      orderBy: {
+        plantingDate: 'desc',
+      },
+    }),
+    prisma.planting.count({
+      where: whereCondition,
+    }),
+  ]);
+
+  const totalPages = Math.ceil(totalCount / ITEMS_PER_PAGE);
 
   return (
-    <div className="container mx-auto py-10">
-      <h1 className="text-2xl font-bold mb-6">Tabela de Plantios</h1>
-      <div className="flex justify-end mb-4">
-        <Link href="/plantings/create">
-          <Button>Cadastrar Plantio</Button>
-        </Link>
+    <div className="py-10">
+      <h1 className="text-2xl font-bold mb-6 text-green-600">Tabela de Plantios</h1>
+      <div className="flex items-center gap-6 my-6">
+        <div className="flex-1">
+          <PlantingSearch />
+        </div>
+        <div className="flex gap-3 flex-shrink-0">
+          <BackButton />
+          <Link href="/plantings/create">
+            <Button>Cadastrar Plantio</Button>
+          </Link>
+        </div>
       </div>
 
       {plantings.length > 0 ? (
@@ -49,18 +111,7 @@ export default async function PlantingsPage() {
                 <TableCell>{planting.plots.map(plot => plot.name).join(', ').toLocaleUpperCase()}</TableCell>
                 <TableCell>{new Date(planting.plantingDate).toLocaleDateString('pt-BR')}</TableCell>
                 <TableCell className="text-right">
-                  <Tooltip>
-                    <TooltipTrigger asChild>
-                      <Link href={`/plantings/edit/${planting.id}`}>
-                        <Button variant="outline" size="icon">
-                          <FaPencilAlt className="h-4 w-4" />
-                        </Button>
-                      </Link>
-                    </TooltipTrigger>
-                    <TooltipContent>
-                      <p>Editar Plantio</p>
-                    </TooltipContent>
-                  </Tooltip>
+                  <EditPlantingButton plantingId={planting.id} />
                 </TableCell>
               </TableRow>
             ))}
@@ -69,6 +120,10 @@ export default async function PlantingsPage() {
       ) : (
         <p className="text-center text-gray-500">Nenhum plantio cadastrado ainda.</p>
       )}
+      
+      <div className="mt-8">
+        <Pagination totalPages={totalPages} currentPage={currentPage} />
+      </div>
     </div>
   );
 }
