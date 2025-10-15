@@ -3,10 +3,11 @@
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { useSession } from 'next-auth/react';
+import Image from 'next/image';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { useEffect } from 'react';
-import { FaFlask, FaLeaf, FaSeedling, FaTractor } from 'react-icons/fa';
+import { FaFlask, FaSeedling, FaSprayCan, FaTractor } from 'react-icons/fa';
 
 export default function HomePage() {
   const { data: session, status } = useSession();
@@ -32,16 +33,8 @@ export default function HomePage() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center py-6">
             <div className="flex items-center">
-              <FaLeaf className="h-8 w-8 text-green-600 mr-3" />
-              <h1 className="text-2xl font-bold text-gray-900">Planejar</h1>
-            </div>
-            <div className="flex space-x-4">
-              <Link href="/auth/signin">
-                <Button variant="outline">Entrar</Button>
-              </Link>
-              <Link href="/auth/signup">
-                <Button>Cadastrar</Button>
-              </Link>
+              <Image src="/planejar.svg" alt="Planejar Logo" width={40} height={40} />
+              <h1 className="text-2xl font-bold text-green-600">Planejar</h1>
             </div>
           </div>
         </div>
@@ -49,16 +42,16 @@ export default function HomePage() {
 
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="py-20 text-center">
-          <h1 className="text-4xl font-bold text-gray-900 sm:text-6xl">
-            Consultoria Agrícola
-            <span className="text-green-600"> Inteligente</span>
+          <h1 className="text-4xl font-bold text-green-600 sm:text-6xl">
+            Planejar -
+            <span className="text-amber-600"> Agrícola Inteligente</span>
           </h1>
           <p className="mt-6 text-xl text-gray-600 max-w-3xl mx-auto">
             Gerencie suas fazendas, talhões, plantios e insumos de forma eficiente e moderna. 
             Tenha controle total da sua produção agrícola.
           </p>
           <div className="mt-10 flex justify-center space-x-4">
-            <Link href="/auth/signup">
+            <Link href="https://wa.me/+5566999083847" target='_blank' >
               <Button size="lg" className="px-8 py-3">
                 Começar Agora
               </Button>
@@ -81,7 +74,7 @@ export default function HomePage() {
             </p>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+          <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
             <Card className="text-center">
               <CardHeader>
                 <FaTractor className="h-12 w-12 text-green-600 mx-auto mb-4" />
@@ -132,18 +125,35 @@ export default function HomePage() {
                 </ul>
               </CardContent>
             </Card>
+
+            <Card className="text-center">
+              <CardHeader>
+                <FaSprayCan className="h-12 w-12 text-green-600 mx-auto mb-4" />
+                <CardTitle>Aplicações</CardTitle>
+                <CardDescription>
+                  Registre e monitore todas as aplicações de defensivos e fertilizantes
+                </CardDescription>
+              </CardHeader>
+              <CardContent>
+                <ul className="text-sm text-gray-600 space-y-2">
+                  <li>• Histórico de aplicações</li>
+                  <li>• Controle de dosagens</li>
+                  <li>• Relatórios detalhados</li>
+                </ul>
+              </CardContent>
+            </Card>
           </div>
         </div>
       </main>
 
-      <footer className="bg-gray-900 text-white">
+      <footer className="bg-transparent">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
           <div className="flex items-center justify-center">
-            <FaLeaf className="h-6 w-6 text-green-500 mr-2" />
-            <span className="text-lg font-semibold">Planejar - Consultoria Agrícola</span>
+            <Image src="/planejar.svg" alt="Planejar Logo" width={40} height={40} />
+            <span className="text-lg font-semibold text-green-600">Planejar - Agrícola Inteligente</span>
           </div>
-          <p className="text-center text-gray-400 mt-4">
-            © 2025 Planejar. Todos os direitos reservados.
+          <p className="text-center text-gray-900 mt-4">
+            ©2025 Planejar. Todos os direitos reservados.
           </p>
         </div>
       </footer>

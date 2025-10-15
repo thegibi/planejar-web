@@ -30,7 +30,6 @@ export default function SignIn() {
       if (result?.error) {
         setError('Email ou senha inválidos');
       } else {
-        // Verificar se a sessão foi criada
         const session = await getSession();
         if (session) {
           router.push('/dashboard');
@@ -63,7 +62,7 @@ export default function SignIn() {
 
           <div className="space-y-4">
             <div>
-              <Label htmlFor="email">Email</Label>
+              <Label htmlFor="email" className='mb-2'>Email</Label>
               <Input
                 id="email"
                 name="email"
@@ -76,7 +75,7 @@ export default function SignIn() {
             </div>
 
             <div>
-              <Label htmlFor="password">Senha</Label>
+              <Label htmlFor="password" className='mb-2'>Senha</Label>
               <Input
                 id="password"
                 name="password"

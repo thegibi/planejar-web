@@ -20,10 +20,10 @@ const geistMono = Geist_Mono({
 
 export const metadata: Metadata = {
   title: {
-    default: "Planejar - Consultoria Agrícola",
+    default: "Planejar - Agrícola Inteligente",
     template: "%s | Planejar",
   },
-  description: "Planejar - Consultoria Agrícola",
+  description: "Planejar - Agrícola Inteligente",
 };
 
 export default function RootLayout({

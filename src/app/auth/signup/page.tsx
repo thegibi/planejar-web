@@ -54,7 +54,6 @@ export default function SignUp() {
         return;
       }
 
-      // Fazer login automaticamente após o registro
       const result = await signIn('credentials', {
         email,
         password,
@@ -93,7 +92,7 @@ export default function SignUp() {
 
           <div className="space-y-4">
             <div>
-              <Label htmlFor="name">Nome completo</Label>
+              <Label htmlFor="name" className='mb-2'>Nome completo</Label>
               <Input
                 id="name"
                 name="name"
@@ -106,7 +105,7 @@ export default function SignUp() {
             </div>
 
             <div>
-              <Label htmlFor="email">Email</Label>
+              <Label htmlFor="email" className='mb-2'>Email</Label>
               <Input
                 id="email"
                 name="email"
@@ -119,7 +118,7 @@ export default function SignUp() {
             </div>
 
             <div>
-              <Label htmlFor="password">Senha</Label>
+              <Label htmlFor="password" className='mb-2'>Senha</Label>
               <Input
                 id="password"
                 name="password"
@@ -132,7 +131,7 @@ export default function SignUp() {
             </div>
 
             <div>
-              <Label htmlFor="confirmPassword">Confirmar senha</Label>
+              <Label htmlFor="confirmPassword" className='mb-2'>Confirmar senha</Label>
               <Input
                 id="confirmPassword"
                 name="confirmPassword"
