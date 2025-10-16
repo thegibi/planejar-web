@@ -4,7 +4,7 @@ import { Button } from '@/components/ui/button';
 import Image from 'next/image';
 
 interface SpraySheetData {
-  client: string;
+  owner: string;
   farm: string;
   culture: string;
   tankCapacity: number;
@@ -68,7 +68,7 @@ export function SpraySheet({ data }: SpraySheetProps) {
         {/* Informações principais */}
         <div className="grid grid-cols-3">
           <div className="border-r border-gray-300 bg-green-600 text-white text-center py-3 font-medium">
-            Cliente
+            Proprietário
           </div>
           <div className="border-r border-gray-300 bg-green-600 text-white text-center py-3 font-medium">
             Fazenda
@@ -80,7 +80,7 @@ export function SpraySheet({ data }: SpraySheetProps) {
 
         <div className="grid grid-cols-3 border-b border-gray-300">
           <div className="border-r border-gray-300 p-3 text-center font-medium text-gray-900">
-            {data.client}
+            {data.owner}
           </div>
           <div className="border-r border-gray-300 p-3 text-center font-medium text-gray-900">
             {data.farm}

@@ -2,27 +2,38 @@
 
 import { Input } from '@/components/ui/input';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
-import { useCallback, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { FaSearch } from 'react-icons/fa';
 
-export default function ClientSearch() {
+export default function OwnerSearch() {
   const searchParams = useSearchParams();
   const pathname = usePathname();
   const { replace } = useRouter();
   const [isFocused, setIsFocused] = useState(false);
+  const [searchTerm, setSearchTerm] = useState(searchParams.get('search') || '');
 
   const handleSearch = useCallback((term: string) => {
-    const params = new URLSearchParams(searchParams);
+    const params = new URLSearchParams(searchParams.toString());
     params.set('page', '1'); // Reset para primeira página ao buscar
     
-    if (term) {
-      params.set('search', term);
+    if (term.trim()) {
+      params.set('search', term.trim());
     } else {
       params.delete('search');
     }
     
-    replace(`${pathname}?${params.toString()}`);
+    const newUrl = `${pathname}?${params.toString()}`;
+    replace(newUrl);
   }, [searchParams, pathname, replace]);
+
+  // Debounce para evitar muitas chamadas
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      handleSearch(searchTerm);
+    }, 300);
+
+    return () => clearTimeout(timer);
+  }, [searchTerm, handleSearch]);
 
   return (
     <div className="relative w-full max-w-6/12">
@@ -31,11 +42,11 @@ export default function ClientSearch() {
       </div>
       <Input
         className="pl-10 w-full"
-        placeholder="Buscar por nome ou email do cliente..."
-        onChange={(e) => handleSearch(e.target.value)}
+        placeholder="Buscar por nome ou email do proprietário..."
+        value={searchTerm}
+        onChange={(e) => setSearchTerm(e.target.value)}
         onFocus={() => setIsFocused(true)}
         onBlur={() => setIsFocused(false)}
-        defaultValue={searchParams.get('search')?.toString()}
       />
     </div>
   );

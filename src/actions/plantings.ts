@@ -42,7 +42,6 @@ export async function createPlanting(formData: FormData) {
     return;
   }
 
-  // Verificar se os talhões existem e pertencem à fazenda
   const plotsExist = await prisma.plot.findMany({
     where: {
       id: { in: validation.data.plotIds },
@@ -138,7 +137,6 @@ export async function updatePlanting(id: number, formData: FormData) {
     return;
   }
 
-  // Verificar se os talhões existem e pertencem à fazenda
   const plotsExist = await prisma.plot.findMany({
     where: {
       id: { in: validation.data.plotIds },
@@ -157,17 +155,15 @@ export async function updatePlanting(id: number, formData: FormData) {
 
   try
   {
-    // Primeiro, desconectar todos os plots atuais
     await prisma.planting.update({
       where: { id },
       data: {
         plots: {
-          set: [], // Remove todas as conexões atuais
+          set: [],
         },
       },
     });
 
-    // Depois, atualizar com os novos dados
     await prisma.planting.update({
       where: { id },
       data: {

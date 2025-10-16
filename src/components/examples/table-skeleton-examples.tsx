@@ -20,7 +20,7 @@ export function ExampleTableSkeleton() {
         columns={4}
         rows={6}
         headers={["Nome", "Email", "Telefone", "Ações"]}
-        caption="Uma tabela dos clientes cadastrados."
+        caption="Uma tabela dos proprietários cadastrados."
       />
       
       <h2 className="text-xl font-bold mb-4 mt-8">Exemplo: Skeleton com Headers Animados</h2>

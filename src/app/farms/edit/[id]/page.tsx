@@ -11,12 +11,12 @@ export default async function EditFarmPage(
   const params = await props.params;
   const farmId = parseInt(params.id);
 
-  const [farm, clients] = await Promise.all([
-    prisma.farm.findUnique({
+  const [farm, owners] = await Promise.all([
+    (prisma as any).farm.findUnique({
       where: { id: farmId },
-      include: { owner: true },
+      include: { client: true },
     }),
-    prisma.client.findMany(),
+    (prisma as any).client.findMany(),
   ]);
 
   if (!farm) {
@@ -99,9 +99,9 @@ export default async function EditFarmPage(
             className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
           >
             <option value="">Selecione um Proprietário</option>
-            {clients.map((client) => (
-              <option key={client.id} value={client.id}>
-                {client.name}
+            {owners.map((owner: any) => (
+              <option key={owner.id} value={owner.id}>
+                {owner.name}
               </option>
             ))}
           </select>

@@ -40,10 +40,8 @@ export async function GET(
       );
     }
 
-    // Buscar todas as variedades para combinar com os plantios
     const varieties = await prisma.variety.findMany();
 
-    // Mapear os plantios para incluir os ciclos das variedades
     const plantingsWithVarietyCycles = farm.plantings.map(planting => ({
       ...planting,
       varietiesWithCycles: planting.varieties.map(varietyName => {

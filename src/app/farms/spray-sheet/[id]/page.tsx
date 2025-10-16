@@ -63,14 +63,13 @@ export default function FarmSpraySheetPage({ params }: FarmSpraySheetProps) {
     );
   }
 
-  // Converter dados da fazenda para o formato da planilha
   const spraySheetData = {
-    client: farmData.owner?.name || 'Cliente não informado',
+    owner: farmData.owner?.name || 'Proprietário não informado',
     farm: farmData.name || 'Fazenda',
     culture: farmData.plantings?.[0]?.crop?.toUpperCase() || 'CULTURA',
     tankCapacity: parseInt(farmData.sprayTank) || 2500,
-    flowRate: 150, // Valor padrão - pode ser configurável
-    hectarePerTank: 16.7, // Calculado baseado na capacidade do tanque
+    flowRate: 150,
+    hectarePerTank: 16.7, 
     date: new Date().toLocaleDateString('pt-BR'),
     plots: farmData.plantings?.[0]?.plots?.map((plot: any) => 
       `${plot.name.toUpperCase()} - ${plot.area}ha`
@@ -81,7 +80,6 @@ export default function FarmSpraySheetPage({ params }: FarmSpraySheetProps) {
     })) || [],
     application: "APLICAÇÃO - DESSECAÇÃO PRÉ PLANTIO",
     products: [
-      // Produtos padrão - em uma implementação real, estes viriam do banco de dados
       { name: "Bravonil", dosePerHa: 0.100, dosePerTank: 1.7, unit: "L" },
       { name: "Alade", dosePerHa: 1.000, dosePerTank: 16.7, unit: "L" },
       { name: "Aproach Power", dosePerHa: 0.250, dosePerTank: 4.2, unit: "L" },

@@ -1,9 +1,8 @@
 import { SpraySheet } from '@/components/spray-sheet';
 
 export default function SpraySheetPage() {
-  // Dados de exemplo baseados no modelo fornecido
   const exampleData = {
-    client: "DANIEL SERAFIN",
+    owner: "DANIEL SERAFIN",
     farm: "VENTO SUL",
     culture: "SOJA",
     tankCapacity: 2500,

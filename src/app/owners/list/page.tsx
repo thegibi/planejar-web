@@ -1,6 +1,7 @@
 import { BackButton } from '@/components/back-button';
-import ClientSearch from '@/components/client-search';
-import { EditClientButton } from '@/components/edit-client-button';
+import { DeleteOwnerButton } from '@/components/delete-owner-button';
+import { EditOwnerButton } from '@/components/edit-owner-button';
+import OwnerSearch from '@/components/owner-search';
 import Pagination from '@/components/pagination';
 import { Button } from '@/components/ui/button';
 import { Table, TableBody, TableCaption, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
@@ -10,7 +11,14 @@ import Link from 'next/link';
 
 const ITEMS_PER_PAGE = 20;
 
-export default async function ClientsPage({ searchParams }: {
+interface Owner {
+  id: number;
+  name: string;
+  phone: string | null;
+  email: string | null;
+}
+
+export default async function OwnersPage({ searchParams }: {
  searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
 }) {
   const currentPage = Number((await searchParams).page) || 1;
@@ -34,14 +42,14 @@ export default async function ClientsPage({ searchParams }: {
     ],
   } : {};
 
-  const [clients, totalCount] = await Promise.all([
-    prisma.client.findMany({
+  const [owners, totalCount] = await Promise.all([
+    prisma.owner.findMany({
       where: whereClause,
       skip,
       take: ITEMS_PER_PAGE,
-      orderBy: { id: 'asc' },
+      orderBy: { name: 'asc' },
     }),
-    prisma.client.count({
+    prisma.owner.count({
       where: whereClause,
     }),
   ]);
@@ -50,39 +58,40 @@ export default async function ClientsPage({ searchParams }: {
 
   return (
     <div className="py-10">
-      <h1 className="text-2xl font-bold text-green-600">Tabela de Clientes</h1>
+      <h1 className="text-2xl font-bold text-green-600">Tabela de Proprietários</h1>
       <div className="flex items-center gap-4 my-6">
         <div className="flex-1">
-          <ClientSearch />
+          <OwnerSearch />
         </div>
-        <div className="flex gap-3 flex-shrink-0">
+        <div className="flex-shrink-0 flex gap-2">
           <BackButton />
-          <Link href="/clients/create">
-            <Button variant="default">Cadastrar Cliente</Button>
+          <Link href="/owners/create">
+            <Button variant="default">Cadastrar</Button>
           </Link>
         </div>
       </div>
-      
-      {clients.length > 0 ? (
+
+      {owners.length > 0 ? (
         <Table>
-          <TableCaption>Uma tabela dos clientes cadastrados.</TableCaption>
+          <TableCaption>Uma lista dos proprietários cadastrados.</TableCaption>
           <TableHeader>
             <TableRow className="first:bg-gray-200">
               <TableHead>Nome</TableHead>
-              <TableHead>Email</TableHead>
               <TableHead>Telefone</TableHead>
-              <TableHead className="text-right">Ações</TableHead> 
+              <TableHead>Email</TableHead>
+              <TableHead className='text-right'>Ações</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
-            {clients.map((client) => (
-              <TableRow key={client.id} className="even:bg-gray-50">
-                <TableCell>{client.name}</TableCell>
-                <TableCell>{client.email}</TableCell>
-                <TableCell>{formatPhoneNumber(client.phone)}</TableCell>
-                <TableCell className="text-right">
+            {owners.map((owner: Owner) => (
+              <TableRow key={owner.id} className="even:bg-gray-50">
+                <TableCell className='capitalize'>{owner.name.toLowerCase()}</TableCell>
+                <TableCell>{owner.phone ? formatPhoneNumber(owner.phone) : 'N/A'}</TableCell>
+                <TableCell>{owner.email || 'N/A'}</TableCell>
+                <TableCell className='text-right'>
                   <div className="flex gap-2 justify-end">
-                    <EditClientButton clientId={client.id} />
+                    <EditOwnerButton ownerId={owner.id} />
+                    <DeleteOwnerButton ownerId={owner.id} ownerName={owner.name} />
                   </div>
                 </TableCell>
               </TableRow>
@@ -90,7 +99,7 @@ export default async function ClientsPage({ searchParams }: {
           </TableBody>
         </Table>
       ) : (
-        <p className="text-center text-gray-500">Nenhum cliente cadastrado ainda.</p>
+        <p className="text-center text-gray-500">Nenhum proprietário cadastrado ainda.</p>
       )}
 
        <div className="mt-8">

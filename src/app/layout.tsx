@@ -3,7 +3,6 @@ import SessionProvider from "@/components/providers/session-provider";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { Analytics } from '@vercel/analytics/next';
 import { SpeedInsights } from "@vercel/speed-insights/next";
-import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import { Toaster } from 'sonner';
 import "./globals.css";
@@ -18,13 +17,23 @@ const geistMono = Geist_Mono({
   subsets: ["latin"],
 });
 
-export const metadata: Metadata = {
+export const metadata = {
   title: {
     default: "Planejar - Agrícola Inteligente",
     template: "%s | Planejar",
   },
   description: "Planejar - Agrícola Inteligente",
-};
+  metadataBase: new URL('https://planejar.app'),
+  alternates: {
+    canonical: '/',
+    languages: {
+      'pt-BR': '/pt-BR',
+    },
+  },
+  openGraph: {
+    images: '/og-image.png',
+  },
+}
 
 export default function RootLayout({
   children,

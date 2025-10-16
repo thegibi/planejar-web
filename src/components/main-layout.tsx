@@ -72,11 +72,11 @@ export function MainLayout({ children }: { children: React.ReactNode }) {
             isActive={pathname === "/dashboard"}
           />
           <NavItem
-            href="/clients/list"
+            href="/owners/list"
             icon={<FaUser className="h-5 w-5" />}
-            label="Clientes"
+            label="Proprietários"
             isCollapsed={isCollapsed}
-            isActive={pathname === "/clients/list"}
+            isActive={pathname === "/owners/list"}
           />
           <NavItem
             href="/farms/list"

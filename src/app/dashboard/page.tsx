@@ -4,14 +4,14 @@ import Link from 'next/link';
 import { FaFlask, FaTractor, FaUser } from 'react-icons/fa';
 
 export default async function DashboardPage() {
-  const [clientCount, farmCount, inputCount] = await Promise.all([
-    prisma.client.count(),
+  const [ownerCount, farmCount, inputCount] = await Promise.all([
+    prisma.owner.count(),
     prisma.farm.count(),
     prisma.input.count(),
   ]);
 
   const cardData = [
-    { title: "Clientes", count: clientCount, icon: FaUser, href: "/clients/list" },
+    { title: "Proprietários", count: ownerCount, icon: FaUser, href: "/owners/list" },
     { title: "Fazendas", count: farmCount, icon: FaTractor, href: "/farms/list" },
     { title: "Insumos", count: inputCount, icon: FaFlask, href: "/inputs/list" },
   ];

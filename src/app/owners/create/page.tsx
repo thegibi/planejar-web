@@ -1,14 +1,14 @@
-import { createClient } from '@/actions/client';
+import { createOwner } from '@/actions/owner';
 import { BackButton } from '@/components/back-button';
 import { SubmitButton } from '@/components/submit-button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 
-export default function CreateClientPage() {
+export default function CreateOwnerPage() {
   return (
     <div className="container mx-auto mt-10 p-4 max-w-lg">
-      <h1 className="text-2xl font-bold mb-10 text-green-600">Cadastrar Cliente</h1>
-      <form action={createClient} className="space-y-5">
+      <h1 className="text-2xl font-bold mb-10 text-green-600">Cadastrar</h1>
+      <form action={createOwner} className="space-y-5">
         <div>
           <Label className='mb-2' htmlFor="name">Nome</Label>
           <Input id="name" name="name" type="text" placeholder="Nome Completo" required />

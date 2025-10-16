@@ -8,12 +8,12 @@ generator client {
   output   = "../lib/generated/prisma-client"
 }
 
-model Client {
+model Owner {
   id      Int      @id @default(autoincrement())
   name    String
   phone   String?
   email   String?  @unique
-  farms   Farm[]
+  farms   Farm[]   @relation("OwnerFarms")
 }
 
 model Farm {
@@ -24,7 +24,7 @@ model Farm {
   sprayTank          String?
   fertilizerSpreader String?
   
-  owner              Client   @relation(fields: [ownerId], references: [id])
+  owner            Owner   @relation("OwnerFarms", fields: [ownerId], references: [id])
   ownerId            Int
   
   plots              Plot[]

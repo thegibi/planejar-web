@@ -9,7 +9,7 @@ import prisma from '@/lib/prisma';
 
 
 export default async function CreateFarmPage() {
-  const clients = await prisma.client.findMany();
+  const owners = await prisma.owner.findMany();
 
   return (
     <div className="container mx-auto mt-10 p-4 max-w-lg">
@@ -42,9 +42,9 @@ export default async function CreateFarmPage() {
           <select id="ownerId" name="ownerId" required
             className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50">
             <option value="">Selecione um Proprietário</option>
-            {clients.map((client) => (
-              <option key={client.id} value={client.id}>
-                {client.name}
+            {owners.map((owner: any) => (
+              <option key={owner.id} value={owner.id}>
+                {owner.name}
               </option>
             ))}
           </select>
