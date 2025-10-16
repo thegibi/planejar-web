@@ -18,6 +18,13 @@ export async function GET(
             name: true,
           },
         },
+        plots: {
+          select: {
+            id: true,
+            name: true,
+            area: true,
+          },
+        },
         plantings: {
           include: {
             plots: {

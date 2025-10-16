@@ -1,8 +1,8 @@
 import { BackButton } from '@/components/back-button';
 import { CreateButton } from '@/components/custom/create-button';
-import { DeleteFarmButton, DetailsFarmButton, EditFarmButton, FarmSearch } from '@/components/farms';
+import { ClickableFarmRow, FarmSearch } from '@/components/farms';
 import Pagination from '@/components/pagination';
-import { Table, TableBody, TableCaption, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
+import { Table, TableBody, TableCaption, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import prisma from '@/lib/prisma';
 
 const ITEMS_PER_PAGE = 20;
@@ -76,29 +76,12 @@ export default async function FarmsPage({ searchParams }: {
               <TableHead>Tanque de Pulverização (lt)</TableHead>
               <TableHead>Distribuidor de Adubo</TableHead>
               <TableHead>Localidade</TableHead>
-              <TableHead>Detalhes</TableHead>
               <TableHead className="text-right">Ações</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
             {farms.map((farm) => (
-              <TableRow key={farm.id} className="even:bg-gray-50">
-                <TableCell className='capitalize'>{farm.name.toLocaleLowerCase()}</TableCell>
-                <TableCell className='capitalize'>{farm.owner.name.toLocaleLowerCase()}</TableCell>
-                <TableCell>{farm.area}</TableCell>
-                <TableCell>{farm.sprayTank}</TableCell>
-                <TableCell>{farm.fertilizerSpreader || <span className="text-gray-500">N/A</span>}</TableCell>
-                <TableCell className='capitalize'>{farm.location.toLocaleLowerCase()}</TableCell>
-                <TableCell>
-                  <DetailsFarmButton farmId={farm.id} />
-                </TableCell>
-                <TableCell className="text-right">
-                  <div className="flex gap-2 justify-end">
-                    <EditFarmButton farmId={farm.id} />
-                    <DeleteFarmButton farmId={farm.id} farmName={farm.name} />
-                  </div>
-                </TableCell>
-              </TableRow>
+              <ClickableFarmRow key={farm.id} farm={farm} />
             ))}
           </TableBody>
         </Table>

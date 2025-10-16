@@ -1,3 +1,4 @@
+export * from './clickable-farm-row';
 export * from './create-farm-form';
 export * from './delete-farm-button';
 export * from './details-farm-button';

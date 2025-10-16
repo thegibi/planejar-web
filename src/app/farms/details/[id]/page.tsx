@@ -38,6 +38,11 @@ interface Farm {
   owner: {
     name: string;
   };
+  plots: {
+    id: number;
+    name: string;
+    area: number;
+  }[];
   plantings: PlantingData[];
 }
 
@@ -173,15 +178,12 @@ export default function FarmDetailsPage({ params }: FarmDetailsProps) {
   const totalPlantedArea = plotData.reduce((sum, plot) => sum + plot.area, 0);
 
   return (
-    <div className="container mx-auto mt-10 p-4">
+    <div className="mt-10 py-10 px-5">
       <div className="flex justify-between items-center mb-6">
         <h1 className="text-3xl font-bold text-green-600">Detalhes da Fazenda: <span className="capitalize">{farm.name.toLocaleLowerCase()}</span></h1>
         <div className="flex gap-2">
           <Link href={`/applications/create/${farm.id}`}>
             <Button variant="default">Cadastrar Aplicações</Button>
-          </Link>
-          <Link href={`/farms/${farm.id}/plots`}>
-            <Button variant="outline">Ver Talhões</Button>
           </Link>
           <Link href="/farms/list">
             <Button variant="outline">Voltar</Button>
@@ -289,6 +291,34 @@ export default function FarmDetailsPage({ params }: FarmDetailsProps) {
           </CardContent>
         </Card>
       </div>
+
+      {/* Seção de Talhões */}
+      <Card className="mb-6">
+        <CardHeader>
+          <CardTitle>Talhões da Fazenda</CardTitle>
+          <CardDescription>
+            Talhões cadastrados nesta fazenda
+          </CardDescription>
+        </CardHeader>
+        <CardContent>
+          {farm.plots && farm.plots.length > 0 ? (
+            <div className="flex flex-wrap gap-2">
+              {farm.plots.map((plot) => (
+                <span 
+                  key={plot.id} 
+                  className="bg-green-100 text-green-800 px-3 py-2 rounded-lg text-sm font-medium"
+                >
+                  {plot.name.toUpperCase()}({plot.area}ha)
+                </span>
+              ))}
+            </div>
+          ) : (
+            <div className="text-center text-gray-500 py-8">
+              Nenhum talhão cadastrado para esta fazenda.
+            </div>
+          )}
+        </CardContent>
+      </Card>
 
       <Card>
         <CardHeader>
