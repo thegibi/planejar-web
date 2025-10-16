@@ -154,7 +154,6 @@ export function MainLayout({ children }: { children: React.ReactNode }) {
         </div>
       </aside>
 
-      {/* Conteúdo Principal */}
       <main className={cn("flex-1 transition-all duration-300 pr-6", paddingLeft)}>
         {children}
       </main>

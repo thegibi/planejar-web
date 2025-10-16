@@ -1,5 +1,5 @@
 import { BackButton } from '@/components/back-button';
-import { DeleteInputButton, EditInputButton, InputClassFilter, InputSearch } from '@/components/input';
+import { DeleteInputButton, EditInputButton, InputClassFilter, InputSearch } from '@/components/inputs';
 import Pagination from '@/components/pagination';
 import { Button } from '@/components/ui/button';
 import { Table, TableBody, TableCaption, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';

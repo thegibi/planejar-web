@@ -3,7 +3,6 @@
 import prisma from '@/lib/prisma';
 import { ownerSchema } from '@/validations/owner';
 import { revalidatePath } from 'next/cache';
-import { redirect } from 'next/navigation';
 
 export async function createOwner(formData: FormData) {
   const rawFormData = {
@@ -18,7 +17,11 @@ export async function createOwner(formData: FormData) {
   {
     const errors = validation.error.issues;
     console.error('Erros de validação:', errors);
-    return;
+    return {
+      success: false,
+      message: 'Dados inválidos. Verifique os campos e tente novamente.',
+      errors
+    };
   }
 
   try
@@ -26,14 +29,20 @@ export async function createOwner(formData: FormData) {
     await prisma.owner.create({
       data: validation.data,
     });
+
+    revalidatePath('/owners/list');
+
+    return {
+      success: true,
+      message: 'Proprietário cadastrado com sucesso!'
+    };
   } catch (error)
   {
-    console.error('Erro ao criar proprietário:', error);
-    return;
+    return {
+      success: false,
+      message: 'Erro interno do servidor. Tente novamente mais tarde.'
+    };
   }
-
-  revalidatePath('/owners/list');
-  redirect('/owners/list');
 }
 
 export async function updateOwner(id: number, formData: FormData) {
@@ -49,7 +58,11 @@ export async function updateOwner(id: number, formData: FormData) {
   {
     const errors = validation.error.issues;
     console.error('Erros de validação:', errors);
-    return;
+    return {
+      success: false,
+      message: 'Dados inválidos. Verifique os campos e tente novamente.',
+      errors
+    };
   }
 
   try
@@ -61,15 +74,20 @@ export async function updateOwner(id: number, formData: FormData) {
       data: validation.data,
     });
 
-    console.log(`Proprietário ${id} atualizado com sucesso!`);
+    revalidatePath('/owners/list');
+
+    return {
+      success: true,
+      message: 'Proprietário atualizado com sucesso!'
+    };
   } catch (error)
   {
     console.error('Erro ao atualizar proprietário:', error);
-    return;
+    return {
+      success: false,
+      message: 'Erro interno do servidor. Tente novamente mais tarde.'
+    };
   }
-
-  revalidatePath('/owners/list');
-  redirect('/owners/list');
 }
 
 export async function deleteOwner(id: number) {

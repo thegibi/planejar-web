@@ -1,7 +1,5 @@
 import { BackButton } from '@/components/back-button';
-import { DeleteOwnerButton } from '@/components/delete-owner-button';
-import { EditOwnerButton } from '@/components/edit-owner-button';
-import OwnerSearch from '@/components/owner-search';
+import { DeleteOwnerButton, EditOwnerButton, OwnerSearch } from '@/components/owners';
 import Pagination from '@/components/pagination';
 import { Button } from '@/components/ui/button';
 import { Table, TableBody, TableCaption, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
@@ -57,7 +55,7 @@ export default async function OwnersPage({ searchParams }: {
   const totalPages = Math.ceil(totalCount / ITEMS_PER_PAGE);
 
   return (
-    <div className="py-10">
+    <div className="py-12 px-5">
       <h1 className="text-2xl font-bold text-green-600">Tabela de Proprietários</h1>
       <div className="flex items-center gap-4 my-6">
         <div className="flex-1">
@@ -73,7 +71,7 @@ export default async function OwnersPage({ searchParams }: {
 
       {owners.length > 0 ? (
         <Table>
-          <TableCaption>Uma lista dos proprietários cadastrados.</TableCaption>
+          <TableCaption>Tabela dos proprietários cadastrados</TableCaption>
           <TableHeader>
             <TableRow className="first:bg-gray-200">
               <TableHead>Nome</TableHead>

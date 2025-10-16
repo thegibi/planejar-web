@@ -58,7 +58,7 @@ export function DeleteOwnerButton({ ownerId, ownerName }: DeleteOwnerButtonProps
         <AlertDialogHeader>
           <AlertDialogTitle>Confirmar exclusão</AlertDialogTitle>
           <AlertDialogDescription>
-            Tem certeza que deseja excluir o proprietário <strong>{ownerName}</strong>?
+            Tem certeza que deseja excluir o proprietário <strong className='capitalize'>{ownerName.toLowerCase()}</strong>?
             Esta ação não pode ser desfeita e irá remover todos os dados relacionados.
           </AlertDialogDescription>
         </AlertDialogHeader>
