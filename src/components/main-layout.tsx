@@ -7,7 +7,7 @@ import { signOut, useSession } from 'next-auth/react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { useState } from 'react';
-import { FaAngleDoubleLeft, FaDashcube, FaDna, FaFlask, FaMapMarkerAlt, FaSeedling, FaSignOutAlt, FaTractor, FaUser } from 'react-icons/fa';
+import { FaAngleDoubleLeft, FaDashcube, FaDna, FaFlask, FaMapMarkerAlt, FaSeedling, FaSignOutAlt, FaSprayCan, FaTractor, FaUser } from 'react-icons/fa';
 
 interface NavItemProps {
   href: string;
@@ -113,9 +113,15 @@ export function MainLayout({ children }: { children: React.ReactNode }) {
             isCollapsed={isCollapsed}
             isActive={pathname === "/plantings/list"}
           />
+          <NavItem
+            href="/applications/list"
+            icon={<FaSprayCan className="h-5 w-5" />}
+            label="Aplicações"
+            isCollapsed={isCollapsed}
+            isActive={pathname === "/applications/list"}
+          />
         </nav>
 
-        {/* Informações do usuário e logout */}
         <div className="mt-auto">
           {session?.user && (
             <div className="border-t pt-4">

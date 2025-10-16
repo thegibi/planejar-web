@@ -1,6 +1,7 @@
 'use client';
 
 import { createApplication, getFarmDetails } from '@/actions/application';
+import { BackButton } from '@/components/back-button';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
@@ -90,7 +91,6 @@ export default function CreateApplicationPage() {
       const planting = farm.plantings.find(p => p.id === selectedPlanting);
       if (planting) {
         setAvailablePlots(planting.plots);
-        // Reset selected plots when changing planting
         setFormData(prev => ({ ...prev, plotIds: [] }));
       }
     }
@@ -166,16 +166,14 @@ export default function CreateApplicationPage() {
   return (
     <div className="container mx-auto mt-10 p-4">
       <div className="flex justify-between items-center mb-6">
-        <h1 className="text-3xl font-bold text-green-600">
-          Cadastrar Aplicação - {farm.name}
+        <h1 className="text-3xl font-medium text-gray-900">
+          Cadastrar Aplicação:  {' '}
+          <span className='font-bold text-green-600'>{farm.name}</span>
         </h1>
-        <Link href={`/farms/details/${farmId}`}>
-          <Button variant="outline">Voltar</Button>
-        </Link>
+        <BackButton />
       </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-        {/* Informações da Fazenda */}
+      <div className="flex flex-col gap-6">
         <Card>
           <CardHeader>
             <CardTitle>Informações da Fazenda</CardTitle>
@@ -305,19 +303,20 @@ export default function CreateApplicationPage() {
               </div>
 
               {/* Botões */}
-              <div className="flex gap-3 pt-6">
-                <Button
-                  type="submit"
-                  disabled={submitting}
-                  className="flex-1"
-                >
-                  {submitting ? 'Cadastrando...' : 'Cadastrar Aplicação'}
-                </Button>
+              <div className="flex justify-between gap-3 pt-6">
                 <Link href={`/farms/details/${farmId}`}>
                   <Button type="button" variant="outline">
                     Cancelar
                   </Button>
                 </Link>
+                <Button
+                  type="submit"
+                  disabled={submitting}
+                  className="flex"
+                >
+                  {submitting ? 'Cadastrando...' : 'Cadastrar Aplicação'}
+                </Button>
+                
               </div>
             </form>
           </CardContent>
