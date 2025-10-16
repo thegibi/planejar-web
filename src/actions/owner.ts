@@ -115,3 +115,25 @@ export async function deleteOwner(id: number) {
     };
   }
 }
+
+export async function getAllOwners() {
+  try
+  {
+    const owners = await prisma.owner.findMany({
+      orderBy: { name: 'asc' }
+    });
+
+    return {
+      success: true,
+      data: owners
+    };
+  } catch (error)
+  {
+    console.error('Erro ao buscar proprietários:', error);
+    return {
+      success: false,
+      message: 'Erro ao carregar proprietários',
+      data: []
+    };
+  }
+}

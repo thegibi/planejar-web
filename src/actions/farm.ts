@@ -3,7 +3,6 @@
 import prisma from '@/lib/prisma';
 import { farmSchema } from '@/validations/farm';
 import { revalidatePath } from 'next/cache';
-import { redirect } from 'next/navigation';
 
 export async function createFarm(formData: FormData) {
   const rawFormData = {
@@ -21,7 +20,11 @@ export async function createFarm(formData: FormData) {
   {
     const errors = validation.error.issues;
     console.error('Erros de validação:', errors);
-    return;
+    return {
+      success: false,
+      message: 'Dados inválidos. Verifique os campos e tente novamente.',
+      errors
+    };
   }
 
   try
@@ -29,14 +32,21 @@ export async function createFarm(formData: FormData) {
     await prisma.farm.create({
       data: validation.data,
     });
-    console.log('Fazenda criada com sucesso!');
+
+    revalidatePath('/farms/list');
+
+    return {
+      success: true,
+      message: 'Fazenda cadastrada com sucesso!'
+    };
+
   } catch (error)
   {
-    console.error('Erro ao criar fazenda:', error);
+    return {
+      success: false,
+      message: 'Erro interno do servidor. Tente novamente mais tarde.'
+    };
   }
-
-  revalidatePath('/farms/list');
-  redirect('/farms/list');
 }
 
 export async function updateFarm(farmId: number, formData: FormData) {
@@ -55,7 +65,11 @@ export async function updateFarm(farmId: number, formData: FormData) {
   {
     const errors = validation.error.issues;
     console.error('Erros de validação:', errors);
-    return;
+    return {
+      success: false,
+      message: 'Dados inválidos. Verifique os campos e tente novamente.',
+      errors
+    };
   }
 
   try
@@ -64,14 +78,20 @@ export async function updateFarm(farmId: number, formData: FormData) {
       where: { id: farmId },
       data: validation.data,
     });
-    console.log('Fazenda atualizada com sucesso!');
+
+    revalidatePath('/farms/list');
+
+    return {
+      success: true,
+      message: 'Fazenda atualizada com sucesso!'
+    };
   } catch (error)
   {
-    console.error('Erro ao atualizar fazenda:', error);
+    return {
+      success: false,
+      message: 'Erro interno do servidor. Tente novamente mais tarde.'
+    };
   }
-
-  revalidatePath('/farms/list');
-  redirect('/farms/list');
 }
 
 export async function getFarmById(id: number) {
@@ -89,12 +109,18 @@ export async function deleteFarm(id: number) {
     await prisma.farm.delete({
       where: { id: id },
     });
-    console.log(`Fazenda ${id} deletada com sucesso!`);
+
+    revalidatePath('/farms/list');
+
+    return {
+      success: true,
+      message: `Fazenda ${id} deletada com sucesso!`
+    };
   } catch (error)
   {
-    console.error('Erro ao deletar fazenda:', error);
-    throw error;
+    return {
+      success: false,
+      message: 'Erro ao excluir a fazenda. Verifique se não há dados relacionados.'
+    };
   }
-
-  revalidatePath('/farms/list');
 }

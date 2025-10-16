@@ -42,7 +42,6 @@
   --radius-lg: var(--radius);
   --radius-xl: calc(var(--radius) + 4px);
   
-  /* Paleta Verde Planejar - baseada em #3C7736 (600) */
   --color-green-50: #f0f9f0;
   --color-green-100: #dcf2dc;
   --color-green-200: #bce5bc;
@@ -55,7 +54,6 @@
   --color-green-900: #223e1f;
   --color-green-950: #0f1f0e;
   
-  /* Paleta Dourada Secundária - baseada em #DEC07A */
   --color-amber-50: #fefbf3;
   --color-amber-100: #fdf5e1;
   --color-amber-200: #fae9c2;

@@ -4,12 +4,12 @@ export default function Loading() {
   return (
     <ListPageSkeleton
       title="Tabela de Talhões"
-      createButtonText="Cadastrar Talhão"
+      createButtonText="Cadastrar"
       createButtonHref="/plots/create"
       columns={4}
       headers={["Nome", "Área (ha)", "Fazenda", "Ações"]}
-      caption="Uma lista dos talhões cadastrados."
-      rows={6}
+      caption="Tabela dos talhões cadastrados."
+      rows={12}
     />
   );
 }

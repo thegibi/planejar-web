@@ -5,7 +5,7 @@ import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import { useCallback, useState } from 'react';
 import { FaSearch } from 'react-icons/fa';
 
-export default function FarmSearch() {
+export function FarmSearch() {
   const searchParams = useSearchParams();
   const pathname = usePathname();
   const { replace } = useRouter();
@@ -13,7 +13,7 @@ export default function FarmSearch() {
 
   const handleSearch = useCallback((term: string) => {
     const params = new URLSearchParams(searchParams);
-    params.set('page', '1'); // Reset para primeira página ao buscar
+    params.set('page', '1'); 
     
     if (term) {
       params.set('search', term);

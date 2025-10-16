@@ -19,7 +19,7 @@ interface EditOwnerFormProps {
   owner: Owner;
 }
 
-export default function EditOwnerForm({ owner }: EditOwnerFormProps) {
+export function EditOwnerForm({ owner }: EditOwnerFormProps) {
   const router = useRouter();
 
   async function handleSubmit(formData: FormData) {
@@ -35,7 +35,9 @@ export default function EditOwnerForm({ owner }: EditOwnerFormProps) {
 
   return (
     <div className="container mx-auto mt-10 p-4 max-w-lg">
-      <h1 className="text-2xl font-bold mb-4 text-green-600">Editar Proprietário: {owner.name}</h1>
+      <h1 className="text-2xl font-medium mb-6 text-gray-900">Editar Proprietário: {' '}
+        <span className="text-green-600 font-bold capitalize">{owner.name.toLowerCase()}</span>
+      </h1>
       <form action={handleSubmit} className="space-y-5">
         <div>
           <Label className='mb-2' htmlFor="name">Nome</Label>

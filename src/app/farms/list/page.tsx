@@ -1,13 +1,9 @@
 import { BackButton } from '@/components/back-button';
-import { DeleteFarmButton } from '@/components/delete-farm-button';
-import { DetailsFarmButton } from '@/components/details-farm-button';
-import { EditFarmButton } from '@/components/edit-farm-button';
-import FarmSearch from '@/components/farm-search';
+import { CreateButton } from '@/components/custom/create-button';
+import { DeleteFarmButton, DetailsFarmButton, EditFarmButton, FarmSearch } from '@/components/farms';
 import Pagination from '@/components/pagination';
-import { Button } from '@/components/ui/button';
 import { Table, TableBody, TableCaption, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import prisma from '@/lib/prisma';
-import Link from 'next/link';
 
 const ITEMS_PER_PAGE = 20;
 
@@ -65,15 +61,13 @@ export default async function FarmsPage({ searchParams }: {
         </div>
         <div className="flex gap-3 flex-shrink-0">
           <BackButton />
-          <Link href="/farms/create">
-            <Button variant="default">Cadastrar Fazenda</Button>
-          </Link>
+          <CreateButton path='/farms/create'/>
         </div>
       </div>
 
       {farms.length > 0 ? (
         <Table>
-          <TableCaption>Uma lista das fazendas cadastradas.</TableCaption>
+          <TableCaption>Tabela das fazendas cadastradas.</TableCaption>
           <TableHeader>
             <TableRow className="first:bg-gray-200">
               <TableHead>Fazenda</TableHead>

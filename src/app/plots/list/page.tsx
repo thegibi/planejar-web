@@ -1,12 +1,9 @@
 import { BackButton } from '@/components/back-button';
-import { DeletePlotButton } from '@/components/delete-plot-button';
-import { EditPlotButton } from '@/components/edit-plot-button';
+import { CreateButton } from '@/components/custom/create-button';
 import Pagination from '@/components/pagination';
-import PlotSearch from '@/components/plot-search';
-import { Button } from '@/components/ui/button';
+import { DeletePlotButton, EditPlotButton, PlotSearch } from '@/components/plots';
 import { Table, TableBody, TableCaption, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import prisma from '@/lib/prisma';
-import Link from 'next/link';
 
 const ITEMS_PER_PAGE = 20;
 
@@ -54,7 +51,7 @@ export default async function PlotsPage({ searchParams }: {
   const totalPages = Math.ceil(totalCount / ITEMS_PER_PAGE);
 
   return (
-    <div className="py-10">
+    <div className="py-10 px-5">
       <h1 className="text-2xl font-bold text-green-600">Tabela de Talhões</h1>
       <div className="flex items-center gap-6 my-6">
         <div className="flex-1">
@@ -62,15 +59,13 @@ export default async function PlotsPage({ searchParams }: {
         </div>
         <div className="flex gap-3 flex-shrink-0">
           <BackButton />
-          <Link href="/plots/create">
-            <Button variant="default">Cadastrar Talhão</Button>
-          </Link>
+          <CreateButton path='/plots/create'/>
         </div>
       </div>
 
       {plots.length > 0 ? (
         <Table>
-          <TableCaption>Uma lista dos talhões cadastrados.</TableCaption>
+          <TableCaption>Tabela dos talhões cadastrados.</TableCaption>
           <TableHeader>
             <TableRow className="first:bg-gray-200">
               <TableHead>Nome</TableHead>

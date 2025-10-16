@@ -43,7 +43,7 @@ export function ListPageSkeleton({
   rows = 5
 }: ListPageSkeletonProps) {
   return (
-    <div className="py-10">
+    <div className="py-10 px-5">
       <h1 className="text-2xl font-bold mb-6">{title}</h1>
       <div className="flex justify-end mb-6">
         <Link href={createButtonHref}>

@@ -1,5 +1,5 @@
+import { EditOwnerForm } from '@/components/owners';
 import prisma from '@/lib/prisma';
-import EditOwnerForm from './edit-owner-form';
 
 interface PageProps {
   params: Promise<{ id: string }>;
