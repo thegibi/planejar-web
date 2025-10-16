@@ -4,9 +4,9 @@ export default function Loading() {
   return (
     <ListPageSkeleton
       title="Tabela de Fazendas"
-      createButtonText="Cadastrar Fazenda"
+      createButtonText="Cadastrar"
       createButtonHref="/farms/create"
-      columns={10}
+      columns={7}
       headers={[
         "Fazenda", 
         "Proprietário", 
@@ -14,13 +14,10 @@ export default function Loading() {
         "Tanque de Pulverização (lt)", 
         "Distribuidor de Adubo", 
         "Localidade", 
-        "Talhões", 
-        "Mapa", 
-        "Detalhes", 
         "Ações"
       ]}
-      caption="Uma lista das fazendas cadastradas."
-      rows={5}
+      caption="Tabela das fazendas cadastradas."
+      rows={12}
     />
   );
 }
