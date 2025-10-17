@@ -1,5 +1,5 @@
-import { NextRequest, NextResponse } from 'next/server';
 import * as jwt from 'jsonwebtoken';
+import { NextRequest, NextResponse } from 'next/server';
 
 // Handler para requisições OPTIONS (CORS preflight)
 export async function OPTIONS() {
@@ -14,16 +14,18 @@ export async function OPTIONS() {
 }
 
 export async function POST(request: NextRequest) {
-  try {
+  try
+  {
     const { token } = await request.json();
 
-    if (!token) {
+    if (!token)
+    {
       return NextResponse.json(
         {
           success: false,
           error: 'Token é obrigatório',
         },
-        { 
+        {
           status: 400,
           headers: {
             'Access-Control-Allow-Origin': '*',
@@ -35,10 +37,11 @@ export async function POST(request: NextRequest) {
     }
 
     const secret = process.env.NEXTAUTH_SECRET || 'fallback-secret';
-    
-    try {
+
+    try
+    {
       const decoded = jwt.verify(token, secret) as any;
-      
+
       return NextResponse.json(
         {
           success: true,
@@ -59,13 +62,14 @@ export async function POST(request: NextRequest) {
           },
         }
       );
-    } catch (jwtError) {
+    } catch (jwtError)
+    {
       return NextResponse.json(
         {
           success: false,
           error: 'Token inválido ou expirado',
         },
-        { 
+        {
           status: 401,
           headers: {
             'Access-Control-Allow-Origin': '*',
@@ -76,7 +80,8 @@ export async function POST(request: NextRequest) {
       );
     }
 
-  } catch (error) {
+  } catch (error)
+  {
     console.error('Erro na verificação do token:', error);
     return NextResponse.json(
       {
@@ -84,7 +89,7 @@ export async function POST(request: NextRequest) {
         error: 'Erro interno do servidor',
         message: 'Não foi possível verificar o token',
       },
-      { 
+      {
         status: 500,
         headers: {
           'Access-Control-Allow-Origin': '*',

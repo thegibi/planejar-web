@@ -1,7 +1,7 @@
 import prisma from '@/lib/prisma';
 import bcrypt from 'bcryptjs';
-import { NextRequest, NextResponse } from 'next/server';
 import * as jwt from 'jsonwebtoken';
+import { NextRequest, NextResponse } from 'next/server';
 
 // Handler para requisições OPTIONS (CORS preflight)
 export async function OPTIONS() {
@@ -16,17 +16,19 @@ export async function OPTIONS() {
 }
 
 export async function POST(request: NextRequest) {
-  try {
+  try
+  {
     const { email, password } = await request.json();
 
     // Validação de entrada
-    if (!email || !password) {
+    if (!email || !password)
+    {
       return NextResponse.json(
         {
           success: false,
           error: 'Email e senha são obrigatórios',
         },
-        { 
+        {
           status: 400,
           headers: {
             'Access-Control-Allow-Origin': '*',
@@ -44,13 +46,14 @@ export async function POST(request: NextRequest) {
       },
     });
 
-    if (!user || !user.password) {
+    if (!user || !user.password)
+    {
       return NextResponse.json(
         {
           success: false,
           error: 'Credenciais inválidas',
         },
-        { 
+        {
           status: 401,
           headers: {
             'Access-Control-Allow-Origin': '*',
@@ -64,13 +67,14 @@ export async function POST(request: NextRequest) {
     // Verificar senha
     const isPasswordValid = await bcrypt.compare(password, user.password);
 
-    if (!isPasswordValid) {
+    if (!isPasswordValid)
+    {
       return NextResponse.json(
         {
           success: false,
           error: 'Credenciais inválidas',
         },
-        { 
+        {
           status: 401,
           headers: {
             'Access-Control-Allow-Origin': '*',
@@ -116,7 +120,8 @@ export async function POST(request: NextRequest) {
       }
     );
 
-  } catch (error) {
+  } catch (error)
+  {
     console.error('Erro no login:', error);
     return NextResponse.json(
       {
@@ -124,7 +129,7 @@ export async function POST(request: NextRequest) {
         error: 'Erro interno do servidor',
         message: 'Não foi possível realizar o login',
       },
-      { 
+      {
         status: 500,
         headers: {
           'Access-Control-Allow-Origin': '*',
