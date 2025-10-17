@@ -19,10 +19,10 @@ const geistMono = Geist_Mono({
 
 export const metadata = {
   title: {
-    default: "Planejar - Agrícola Inteligente",
+    default: "Planejar - Agricultura Inteligente",
     template: "%s | Planejar",
   },
-  description: "Planejar - Agrícola Inteligente",
+  description: "Planejar - Agricultura Inteligente",
   metadataBase: new URL('https://planejar.app'),
   alternates: {
     canonical: '/',
