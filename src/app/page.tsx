@@ -33,7 +33,7 @@ export default function HomePage() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center py-6">
             <div className="flex items-center">
-              <Image src="/planejar.svg" alt="Planejar Logo" width={40} height={40} />
+              <Image src="/planejar-logo.png" alt="Planejar Logo" width={40} height={40} />
               <h1 className="text-2xl font-bold text-green-600">Planejar</h1>
             </div>
           </div>
@@ -44,7 +44,7 @@ export default function HomePage() {
         <div className="py-20 text-center">
           <h1 className="text-4xl font-bold text-green-600 sm:text-6xl">
             Planejar -
-            <span className="text-amber-600"> Agrícola Inteligente</span>
+            <span className="text-amber-600"> Agricultura Inteligente</span>
           </h1>
           <p className="mt-6 text-xl text-gray-600 max-w-3xl mx-auto">
             Gerencie suas fazendas, talhões, plantios e insumos de forma eficiente e moderna. 
@@ -75,7 +75,7 @@ export default function HomePage() {
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
-            <Card className="text-center">
+            <Card className="text-center hover:border-green-600 hover:shadow-lg transition">
               <CardHeader>
                 <FaTractor className="h-12 w-12 text-green-600 mx-auto mb-4" />
                 <CardTitle>Gestão de Fazendas</CardTitle>
@@ -92,7 +92,7 @@ export default function HomePage() {
               </CardContent>
             </Card>
 
-            <Card className="text-center">
+            <Card className="text-center hover:border-green-600 hover:shadow-lg transition">
               <CardHeader>
                 <FaSeedling className="h-12 w-12 text-green-600 mx-auto mb-4" />
                 <CardTitle>Controle de Plantios</CardTitle>
@@ -109,7 +109,7 @@ export default function HomePage() {
               </CardContent>
             </Card>
 
-            <Card className="text-center">
+            <Card className="text-center hover:border-green-600 hover:shadow-lg transition">
               <CardHeader>
                 <FaFlask className="h-12 w-12 text-green-600 mx-auto mb-4" />
                 <CardTitle>Gestão de Insumos</CardTitle>
@@ -126,7 +126,7 @@ export default function HomePage() {
               </CardContent>
             </Card>
 
-            <Card className="text-center">
+            <Card className="text-center hover:border-green-600 hover:shadow-lg transition">
               <CardHeader>
                 <FaSprayCan className="h-12 w-12 text-green-600 mx-auto mb-4" />
                 <CardTitle>Aplicações</CardTitle>
@@ -149,8 +149,8 @@ export default function HomePage() {
       <footer className="bg-transparent">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
           <div className="flex items-center justify-center">
-            <Image src="/planejar.svg" alt="Planejar Logo" width={40} height={40} />
-            <span className="text-lg font-semibold text-green-600">Planejar - Agrícola Inteligente</span>
+            <Image src="/planejar-logo.png" alt="Planejar Logo" width={40} height={40} />
+            <span className="text-lg font-semibold text-green-600">Planejar - Agricultura Inteligente</span>
           </div>
           <p className="text-center text-gray-900 mt-4">
             ©2025 Planejar. Todos os direitos reservados.
