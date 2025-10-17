@@ -81,7 +81,8 @@ model Application {
   applicationDate DateTime
   plotIds         Int[]   
   inputIds        Int[]   
-  observations    String? 
+  flowRate        Float?   // Vazão
+  rowSpacing      Float?   // Espaço entre as linhas
   
   farm            Farm     @relation(fields: [farmId], references: [id])
   farmId          Int

@@ -16,7 +16,8 @@ export const applicationSchema = z.object({
   inputIds: z.array(z.number().int().positive()).min(1, {
     message: "Pelo menos um insumo deve ser selecionado"
   }),
-  observations: z.string().optional()
+  flowRate: z.number().positive().optional(),
+  rowSpacing: z.number().positive().optional()
 });
 
 export const applicationFormSchema = z.object({
@@ -32,7 +33,8 @@ export const applicationFormSchema = z.object({
   inputIds: z.array(z.string()).min(1, {
     message: "Pelo menos um insumo deve ser selecionado"
   }),
-  observations: z.string().optional()
+  flowRate: z.string().optional(),
+  rowSpacing: z.string().optional()
 });
 
 export type ApplicationData = z.infer<typeof applicationSchema>;

@@ -4,36 +4,34 @@ import { NextRequest, NextResponse } from 'next/server';
 export async function GET(request: NextRequest) {
   try
   {
-
-    const farms = await Promise.all([
-      prisma.farm.findMany({
-        orderBy: { id: 'asc' },
-        include: {
-          owner: {
-            select: {
-              id: true,
-              name: true,
-              phone: true,
-              email: true,
-            },
-          },
-          plots: {
-            select: {
-              id: true,
-              name: true,
-              area: true,
-            },
-          },
-          _count: {
-            select: {
-              plots: true,
-              plantings: true,
-            },
+    const farms = await prisma.farm.findMany({
+      orderBy: { id: 'asc' },
+      include: {
+        owner: {
+          select: {
+            id: true,
+            name: true,
+            phone: true,
+            email: true,
           },
         },
-      }),
-    ]);
+        plots: {
+          select: {
+            id: true,
+            name: true,
+            area: true,
+          },
+        },
+        _count: {
+          select: {
+            plots: true,
+            plantings: true,
+          },
+        },
+      },
+    })
 
+    console.log('Fazendas carregadas com sucesso:', farms);
     return NextResponse.json(farms, { status: 200 });
   } catch (error)
   {

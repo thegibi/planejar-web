@@ -14,7 +14,8 @@ export async function createApplication(formData: ApplicationFormData) {
       applicationDate: new Date(formData.applicationDate),
       plotIds: formData.plotIds.map(id => parseInt(id)),
       inputIds: formData.inputIds.map(id => parseInt(id)),
-      observations: formData.observations
+      flowRate: formData.flowRate ? parseFloat(formData.flowRate) : undefined,
+      rowSpacing: formData.rowSpacing ? parseFloat(formData.rowSpacing) : undefined
     };
 
     // Buscar o farmId através do plantingId

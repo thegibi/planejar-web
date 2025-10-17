@@ -6,7 +6,6 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { Textarea } from '@/components/ui/textarea';
 import { ApplicationFormData } from '@/validations/application';
 import Link from 'next/link';
 import { useParams, useRouter } from 'next/navigation';
@@ -60,7 +59,8 @@ export default function CreateApplicationPage() {
     applicationDate: '',
     plotIds: [],
     inputIds: [],
-    observations: ''
+    flowRate: '',
+    rowSpacing: ''
   });
 
   const [selectedPlanting, setSelectedPlanting] = useState<number | null>(null);
@@ -290,15 +290,29 @@ export default function CreateApplicationPage() {
                 </div>
               </div>
 
-              {/* Observações */}
+              {/* Vazão (Flow Rate) */}
               <div>
-                <Label htmlFor="observations">Observações</Label>
-                <Textarea
-                  id="observations"
-                  value={formData.observations}
-                  onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => setFormData(prev => ({ ...prev, observations: e.target.value }))}
-                  placeholder="Observações sobre a aplicação (opcional)"
-                  rows={3}
+                <Label htmlFor="flowRate">Vazão (L/ha)</Label>
+                <Input
+                  id="flowRate"
+                  type="number"
+                  step="0.1"
+                  value={formData.flowRate}
+                  onChange={(e: React.ChangeEvent<HTMLInputElement>) => setFormData(prev => ({ ...prev, flowRate: e.target.value }))}
+                  placeholder="Vazão em litros por hectare (opcional)"
+                />
+              </div>
+
+              {/* Espaço entre Linhas (Row Spacing) */}
+              <div>
+                <Label htmlFor="rowSpacing">Espaço entre Linhas (m)</Label>
+                <Input
+                  id="rowSpacing"
+                  type="number"
+                  step="0.01"
+                  value={formData.rowSpacing}
+                  onChange={(e: React.ChangeEvent<HTMLInputElement>) => setFormData(prev => ({ ...prev, rowSpacing: e.target.value }))}
+                  placeholder="Espaço entre linhas em metros (opcional)"
                 />
               </div>
 
