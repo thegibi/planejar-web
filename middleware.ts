@@ -30,11 +30,13 @@ export const config = {
     /*
      * Match all request paths except for the ones starting with:
      * - api/auth (auth API routes)
+     * - api/farms (farms API routes)
+     * - api/varieties (varieties API routes)
      * - _next/static (static files)
      * - _next/image (image optimization files)
      * - favicon.ico (favicon file)
      * - public folder
      */
-    '/((?!api/auth|_next/static|_next/image|favicon.ico|.*\\.png$|.*\\.jpg$|.*\\.jpeg$|.*\\.gif$|.*\\.svg$).*)',
+    '/((?!api/auth|api/farms|api/varieties|_next/static|_next/image|favicon.ico|.*\\.png$|.*\\.jpg$|.*\\.jpeg$|.*\\.gif$|.*\\.svg$).*)',
   ],
 };
