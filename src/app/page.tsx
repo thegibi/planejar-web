@@ -33,7 +33,7 @@ export default function HomePage() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center py-6">
             <div className="flex items-center">
-              <Image src="/planejar-logo.png" alt="Planejar Logo" width={40} height={40} />
+              <Image src="/planejar-logo@512.png" alt="Planejar Logo" width={40} height={40} />
               <h1 className="text-2xl font-bold text-green-600">Planejar</h1>
             </div>
           </div>
@@ -149,7 +149,7 @@ export default function HomePage() {
       <footer className="bg-transparent">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
           <div className="flex items-center justify-center">
-            <Image src="/planejar-logo.png" alt="Planejar Logo" width={40} height={40} />
+            <Image src="/planejar-logo@512.png" alt="Planejar Logo" width={40} height={40} />
             <span className="text-lg font-semibold text-green-600">Planejar - Agricultura Inteligente</span>
           </div>
           <p className="text-center text-gray-900 mt-4">
