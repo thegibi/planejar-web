@@ -33,6 +33,7 @@ export async function createFarm(formData: FormData) {
       data: validation.data,
     });
 
+    // await sendPushNotification('Nova Fazenda Cadastrada', 'Uma nova fazenda foi cadastrada com sucesso.');
     revalidatePath('/farms/list');
 
     return {

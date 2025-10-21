@@ -14,7 +14,8 @@ export async function OPTIONS() {
 }
 
 export async function GET(request: NextRequest) {
-  try {
+  try
+  {
     const { searchParams } = new URL(request.url);
     const page = parseInt(searchParams.get('page') || '1');
     const limit = parseInt(searchParams.get('limit') || '20');
@@ -27,12 +28,14 @@ export async function GET(request: NextRequest) {
     const whereClause: any = {};
 
     // Filtrar por fazenda específica se fornecido
-    if (farmId) {
+    if (farmId)
+    {
       whereClause.farmId = parseInt(farmId);
     }
 
     // Filtro de busca por texto
-    if (search) {
+    if (search)
+    {
       whereClause.OR = [
         {
           crop: {
@@ -166,7 +169,8 @@ export async function GET(request: NextRequest) {
       },
     });
 
-  } catch (error) {
+  } catch (error)
+  {
     console.error('Erro ao buscar plantings:', error);
     return NextResponse.json(
       {
@@ -174,7 +178,7 @@ export async function GET(request: NextRequest) {
         error: 'Erro interno do servidor',
         message: 'Não foi possível carregar os plantings',
       },
-      { 
+      {
         status: 500,
         headers: {
           'Access-Control-Allow-Origin': '*',

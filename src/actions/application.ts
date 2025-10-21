@@ -79,6 +79,31 @@ export async function createApplication(formData: ApplicationFormData) {
   }
 }
 
+export async function getAllInputs() {
+  try
+  {
+    const inputs = await prisma.input.findMany({
+      select: {
+        id: true,
+        class: true,
+        commercialBrand: true,
+        activeIngredient: true,
+        unitOfMeasure: true
+      },
+      orderBy: [
+        { class: 'asc' },
+        { commercialBrand: 'asc' }
+      ]
+    });
+
+    return inputs;
+  } catch (error)
+  {
+    console.error('Erro ao buscar todos os insumos:', error);
+    return [];
+  }
+}
+
 export async function getFarmDetails(farmId: number) {
   try
   {

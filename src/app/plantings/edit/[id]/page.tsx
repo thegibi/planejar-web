@@ -202,8 +202,8 @@ export default function EditPlantingPage({ params }: EditPlantingPageProps) {
         </div>
 
         <div className='flex justify-between'>
-          <SubmitButton />
           <BackButton />
+          <SubmitButton />
         </div>
       </form>
     </div>

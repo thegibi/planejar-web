@@ -5,6 +5,7 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import Link from 'next/link';
 import { useEffect, useState } from 'react';
+import { FaDna, FaMapMarked, FaSeedling } from 'react-icons/fa';
 import { Cell, Legend, Pie, PieChart, ResponsiveContainer, Tooltip } from 'recharts';
 
 interface FarmDetailsProps {
@@ -72,6 +73,7 @@ export default function FarmDetailsPage({ params }: FarmDetailsProps) {
   const [varietyData, setVarietyData] = useState<VarietyData[]>([]);
   const [plotData, setPlotData] = useState<PlotData[]>([]);
   const [farmId, setFarmId] = useState<string>('');
+  const [totalPlotsArea, setTotalPlotsArea] = useState<number>(0);
 
   useEffect(() => {
     async function initializePage() {
@@ -88,10 +90,10 @@ export default function FarmDetailsPage({ params }: FarmDetailsProps) {
       try {
         const response = await fetch(`/api/farms/${farmId}/details`);
         if (!response.ok) throw new Error('Farm not found');
-        
+        console.log(response)
         const farmData: Farm = await response.json();
         setFarm(farmData);
-        
+        setTotalPlotsArea(farmData.plots.reduce((sum, plot) => sum + plot.area, 0));
         processVarietyData(farmData.plantings);
         processPlotData(farmData.plantings);
       } catch (error) {
@@ -139,7 +141,7 @@ export default function FarmDetailsPage({ params }: FarmDetailsProps) {
     });
 
     const totalArea = Array.from(plotMap.values()).reduce((sum, area) => sum + area, 0);
-    
+
     const data: PlotData[] = Array.from(plotMap.entries()).map(([name, area], index) => ({
       name: name.toUpperCase(),
       area: Number(area.toFixed(2)),
@@ -180,7 +182,7 @@ export default function FarmDetailsPage({ params }: FarmDetailsProps) {
   return (
     <div className="mt-10 py-10 px-5">
       <div className="flex justify-between items-center mb-6">
-        <h1 className="text-3xl font-bold text-green-600">Detalhes da Fazenda: <span className="capitalize">{farm.name.toLocaleLowerCase()}</span></h1>
+        <h1 className="text-2xl font-bold text-black">Detalhes da Fazenda: <span className="capitalize text-green-600">{farm.name.toLocaleLowerCase()}</span></h1>
         <div className="flex gap-2">
           <Link href={`/applications/create/${farm.id}`}>
             <Button variant="default">Cadastrar Aplicações</Button>
@@ -294,21 +296,30 @@ export default function FarmDetailsPage({ params }: FarmDetailsProps) {
 
       {/* Seção de Talhões */}
       <Card className="mb-6">
-        <CardHeader>
-          <CardTitle>Talhões da Fazenda</CardTitle>
+        <CardHeader className='flex justify-between'>
+          <div>
+            <CardTitle>
+            <FaMapMarked className="inline mr-2 mb-1 text-green-600" />
+            <span className='text-green-600'>Talhões da Fazenda</span>
+          </CardTitle>
           <CardDescription>
             Talhões cadastrados nesta fazenda
           </CardDescription>
+          </div>
+          <div>
+            <CardTitle>Área Total dos Talhões: <span className='text-green-600'>{totalPlotsArea} ha</span></CardTitle>
+            <CardDescription>Área total dos talhões cadastrados</CardDescription>
+          </div>
         </CardHeader>
-        <CardContent>
+        <CardContent className='flex justify-between'>
           {farm.plots && farm.plots.length > 0 ? (
             <div className="flex flex-wrap gap-2">
               {farm.plots.map((plot) => (
                 <span 
                   key={plot.id} 
-                  className="bg-green-100 text-green-800 px-3 py-2 rounded-lg text-sm font-medium"
+                  className="bg-green-100 text-green-600 border border-green-600 px-3 py-2 rounded-lg text-xs font-medium"
                 >
-                  {plot.name.toUpperCase()}({plot.area}ha)
+                  {plot.name.toUpperCase()} ({plot.area}ha)
                 </span>
               ))}
             </div>
@@ -322,7 +333,10 @@ export default function FarmDetailsPage({ params }: FarmDetailsProps) {
 
       <Card>
         <CardHeader>
-          <CardTitle>Histórico de Plantios</CardTitle>
+          <CardTitle>
+            <FaSeedling className="inline mr-2 mb-1 text-green-600" />
+            <span className='text-green-600'>Plantios da Fazenda</span>
+          </CardTitle>
           <CardDescription>
             Todos os plantios realizados nesta fazenda
           </CardDescription>
@@ -333,19 +347,22 @@ export default function FarmDetailsPage({ params }: FarmDetailsProps) {
               {farm.plantings.map((planting) => (
                 <div key={planting.id} className="border rounded-lg p-4">
                   <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-                    <div>
-                      <strong>Cultura:</strong> {planting.crop.toLocaleUpperCase()}
+                    <div className='flex flex-col'>
+                      <strong>Cultura:</strong> 
+                      <span className="text-green-600 font-medium text-xs">{planting.crop.toLocaleUpperCase()}</span>
                     </div>
                     <div>
-                      <strong>Variedades:</strong>
-                      <div className="flex flex-wrap gap-1 mt-1">
+                      <div className='flex items-center mb-2 gap-1 font-bold'>
+                        <FaDna className='text-amber-800'/>
+                        <span className='text-amber-800'>Variedades:</span>
+                      </div>
+                      <div className="flex flex-wrap gap-2 mt-1 w-fit">
                         {planting.varietiesWithCycles?.map((variety, index) => (
-                          <span key={index} className="text-sm">
+                          <span key={index} className="bg-amber-100 border border-amber-800 text-amber-800 p-2 rounded text-xs font-medium">
                             {variety.name.toLocaleUpperCase()}
                             {variety.cycle && (
-                              <span className="text-gray-600"> ({variety.cycle} dias)</span>
+                              <span className="text-amber-800"> ({variety.cycle} dias)</span>
                             )}
-                            {index < planting.varietiesWithCycles.length - 1 && ', '}
                           </span>
                         )) || planting.varieties.join(', ').toLocaleUpperCase()}
                       </div>
@@ -358,10 +375,13 @@ export default function FarmDetailsPage({ params }: FarmDetailsProps) {
                     </div>
                   </div>
                   <div className="mt-2">
-                    <strong>Talhões utilizados:</strong>
+                    <div>
+                      <FaMapMarked className="inline mr-2 mb-1 text-green-600" />
+                      <strong className='text-green-600'>Talhões utilizados:</strong>
+                    </div>
                     <div className="flex flex-wrap gap-2 mt-1">
                       {planting.plots.map((plot) => (
-                        <span key={plot.id} className="bg-gray-100 px-2 py-1 rounded text-sm">
+                        <span key={plot.id} className="bg-green-100 px-2 py-1 border border-green-600 text-green-600 font-medium rounded text-xs">
                           {plot.name.toLocaleUpperCase()} ({plot.area} ha)
                         </span>
                       ))}

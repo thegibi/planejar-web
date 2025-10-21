@@ -32,7 +32,7 @@ export default function SignIn() {
       } else {
         const session = await getSession();
         if (session) {
-          router.push('/dashboard');
+          router.push('/farms/list');
           router.refresh();
         }
       }

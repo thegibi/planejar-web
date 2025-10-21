@@ -33,11 +33,12 @@ export const config = {
      * - api/farms (farms API routes)
      * - api/varieties (varieties API routes)
      * - api/plantings (plantings API routes)
+     * - api/applications (applications API routes)
      * - _next/static (static files)
      * - _next/image (image optimization files)
      * - favicon.ico (favicon file)
      * - public folder
      */
-    '/((?!api/auth|api/farms|api/varieties|api/plantings|_next/static|_next/image|favicon.ico|.*\\.png$|.*\\.jpg$|.*\\.jpeg$|.*\\.gif$|.*\\.svg$).*)',
+    '/((?!api/auth|api/farms|api/varieties|api/plantings|api/applications|_next/static|_next/image|favicon.ico|.*\\.png$|.*\\.jpg$|.*\\.jpeg$|.*\\.gif$|.*\\.svg$).*)',
   ],
 };

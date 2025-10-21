@@ -70,6 +70,28 @@ export default async function PlantingsPage({ searchParams }: {
     }),
   ]);
 
+  // Buscar informações das variedades para cada plantio
+  const plantingsWithVarietyInfo = await Promise.all(
+    plantings.map(async (planting) => {
+      const varietiesWithCycles = await Promise.all(
+        planting.varieties.map(async (varietyName) => {
+          const variety = await prisma.variety.findFirst({
+            where: { name: varietyName }
+          });
+          return {
+            name: varietyName,
+            cycle: variety?.cycle || null
+          };
+        })
+      );
+      
+      return {
+        ...planting,
+        varietiesWithCycles
+      };
+    })
+  );
+
   const totalPages = Math.ceil(totalCount / ITEMS_PER_PAGE);
 
   return (
@@ -94,18 +116,28 @@ export default async function PlantingsPage({ searchParams }: {
             <TableRow>
               <TableHead>Cultura</TableHead>
               <TableHead>Variedade</TableHead>
+              <TableHead>Ciclo</TableHead>
               <TableHead>População</TableHead>
               <TableHead>Fazenda</TableHead>
               <TableHead>Talhão</TableHead>
               <TableHead>Data do Plantio</TableHead>
-              <TableHead className="text-right">Editar</TableHead>
+              <TableHead className="text-right">Ações</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
-            {plantings.map((planting) => (
+            {plantingsWithVarietyInfo.map((planting) => (
               <TableRow key={planting.id} className="even:bg-gray-100">
                 <TableCell>{planting.crop.toLocaleUpperCase()}</TableCell>
                 <TableCell>{planting.varieties.join(', ').toLocaleUpperCase()}</TableCell>
+                <TableCell>
+                  {planting.varietiesWithCycles.map(v => v.cycle).filter(Boolean).length > 0 
+                    ? planting.varietiesWithCycles
+                        .filter(v => v.cycle)
+                        .map(v => `${v.cycle} dias`)
+                        .join(', ')
+                    : 'N/A'
+                  }
+                </TableCell>
                 <TableCell>{planting.population.toLocaleString()}</TableCell>
                 <TableCell>{planting.farm.name}</TableCell>
                 <TableCell>{planting.plots.map(plot => plot.name).join(', ').toLocaleUpperCase()}</TableCell>

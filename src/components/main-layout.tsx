@@ -7,7 +7,7 @@ import { signOut, useSession } from 'next-auth/react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { useState } from 'react';
-import { FaAngleDoubleLeft, FaDashcube, FaDna, FaFlask, FaMapMarkerAlt, FaSeedling, FaSignOutAlt, FaSprayCan, FaTractor, FaUser } from 'react-icons/fa';
+import { FaAngleDoubleLeft, FaDashcube, FaDna, FaFlask, FaMapMarked, FaSeedling, FaSignOutAlt, FaSprayCan, FaTractor, FaUser } from 'react-icons/fa';
 
 interface NavItemProps {
   href: string;
@@ -45,7 +45,7 @@ const NavItem: React.FC<NavItemProps> = ({ href, icon, label, isCollapsed, isAct
 
 export function MainLayout({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
-  const [isCollapsed, setIsCollapsed] = useState(false);
+  const [isCollapsed, setIsCollapsed] = useState(true);
   const { data: session, status } = useSession();
   const sidebarWidth = isCollapsed ? 'w-[70px]' : 'w-[256px]';
   const paddingLeft = isCollapsed ? 'pl-[94px]' : 'pl-[280px]';
@@ -87,7 +87,7 @@ export function MainLayout({ children }: { children: React.ReactNode }) {
           />
           <NavItem
             href="/plots/list"
-            icon={<FaMapMarkerAlt className="h-5 w-5" />}
+            icon={<FaMapMarked className="h-5 w-5" />}
             label="Talhões"
             isCollapsed={isCollapsed}
             isActive={pathname === "/plots/list"}
