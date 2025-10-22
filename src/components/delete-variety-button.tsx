@@ -1,6 +1,5 @@
 'use client';
 
-import { deleteOwner } from '@/actions/owner';
 import {
     AlertDialog,
     AlertDialogAction,
@@ -14,32 +13,41 @@ import {
 } from '@/components/ui/alert-dialog';
 import { Button } from '@/components/ui/button';
 import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip';
+import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 import { FaTrash } from 'react-icons/fa';
 import { toast } from 'sonner';
 
-interface DeleteOwnerButtonProps {
-  ownerId: number;
-  ownerName: string;
+interface DeleteVarietyButtonProps {
+  varietyId: number;
+  varietyName: string;
 }
 
-export function DeleteOwnerButton({ ownerId, ownerName }: DeleteOwnerButtonProps) {
+export function DeleteVarietyButton({ varietyId, varietyName }: DeleteVarietyButtonProps) {
+  const router = useRouter();
   const [isDeleting, setIsDeleting] = useState(false);
   const [open, setOpen] = useState(false);
 
   const handleDelete = async () => {
     setIsDeleting(true);
     try {
-      const result = await deleteOwner(ownerId);
-      
-      if (result.success) {
-        toast.success(result.message);
-        setOpen(false);
-      } else {
-        toast.error(result.message);
+      const response = await fetch(`/api/varieties/${varietyId}`, {
+        method: 'DELETE',
+      });
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        toast.error(data.error || 'Erro ao excluir variedade');
+        return;
       }
+
+      toast.success('Variedade excluída com sucesso!');
+      setOpen(false);
+      router.refresh();
     } catch (error) {
-      toast.error('Erro inesperado ao excluir o proprietário');
+      console.error('Erro ao excluir variedade:', error);
+      toast.error('Erro inesperado ao excluir variedade');
     } finally {
       setIsDeleting(false);
     }
@@ -51,8 +59,8 @@ export function DeleteOwnerButton({ ownerId, ownerName }: DeleteOwnerButtonProps
         <TooltipTrigger asChild>
           <AlertDialogTrigger asChild>
             <Button
-              size="icon"
               variant="link"
+              size="icon"
               className="text-red-600 hover:text-red-700 hover:bg-red-50"
               disabled={isDeleting}
             >
@@ -61,7 +69,7 @@ export function DeleteOwnerButton({ ownerId, ownerName }: DeleteOwnerButtonProps
           </AlertDialogTrigger>
         </TooltipTrigger>
         <TooltipContent className="bg-red-600 text-white" arrowClassName="bg-red-600 fill-red-600">
-          <p>Excluir Proprietário</p>
+          <p>Excluir Variedade</p>
         </TooltipContent>
       </Tooltip>
       
@@ -69,8 +77,8 @@ export function DeleteOwnerButton({ ownerId, ownerName }: DeleteOwnerButtonProps
         <AlertDialogHeader>
           <AlertDialogTitle>Confirmar exclusão</AlertDialogTitle>
           <AlertDialogDescription>
-            Tem certeza que deseja excluir o proprietário <strong className='capitalize'>{ownerName.toLowerCase()}</strong>?
-            Esta ação não pode ser desfeita e irá remover todos os dados relacionados.
+            Tem certeza que deseja excluir a variedade <strong className="uppercase">&quot;{varietyName}&quot;</strong>?
+            Esta ação não pode ser desfeita e pode afetar plantios que utilizam esta variedade.
           </AlertDialogDescription>
         </AlertDialogHeader>
         <AlertDialogFooter>

@@ -4,7 +4,7 @@ import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
-import { Calendar, ChevronLeft, ChevronRight, Eye, Loader2, MapPin, Printer, Search, Tractor } from 'lucide-react';
+import { Calendar, ChevronLeft, ChevronRight, Loader2, MapPin, Printer, Search, Tractor } from 'lucide-react';
 import { useEffect, useState } from 'react';
 import { toast } from 'sonner';
 
@@ -124,13 +124,7 @@ export default function ApplicationsPage() {
     }
   };
 
-  // Função para visualizar aplicação
-  const handleViewApplication = (applicationId: number) => {
-    // TODO: Navegar para página de detalhes da aplicação
-    window.location.href = `/applications/view/${applicationId}`;
-  };
 
-  // Função para imprimir aplicação seguindo o modelo da spray-sheet
   const handlePrintApplication = (application: ApplicationData) => {
     const totalArea = application.plots.reduce((sum, plot) => sum + plot.area, 0);
     const hectarePerTank = application.flowRate ? (2000 / application.flowRate).toFixed(2) : 'N/A';
@@ -304,9 +298,9 @@ export default function ApplicationsPage() {
               <div class="header-cell">Cultura</div>
             </div>
             <div class="grid-3">
-              <div class="data-cell">${application.farm.owner.name}</div>
-              <div class="data-cell">${application.farm.name}</div>
-              <div class="data-cell">${application.planting.crop}</div>
+              <div class="data-cell">${application.farm.owner.name.toLocaleUpperCase()}</div>
+              <div class="data-cell">${application.farm.name.toLocaleUpperCase()}</div>
+              <div class="data-cell">${application.planting.crop.toLocaleUpperCase()}</div>
             </div>
 
             <!-- Informações do tanque -->
@@ -449,7 +443,7 @@ export default function ApplicationsPage() {
                     {/* Informações do proprietário e vazão */}
                     <div className="text-right">
                       <Badge variant="outline" className="text-xs">
-                        {application.farm.owner.name}
+                        {application.farm.owner.name.toLocaleUpperCase()}
                       </Badge>
                       {application.flowRate && (
                         <p className="text-xs text-gray-500 mt-1">
@@ -491,15 +485,6 @@ export default function ApplicationsPage() {
                     
                     {/* Botões de ação no bottom direito */}
                     <div className="flex justify-end gap-2 mt-4">
-                      <Button
-                        size="sm"
-                        variant="outline"
-                        onClick={() => handleViewApplication(application.id)}
-                        className="flex items-center gap-2 text-xs"
-                      >
-                        <Eye className="h-3 w-3" />
-                        Ver
-                      </Button>
                       <Button
                         size="sm"
                         variant="outline"

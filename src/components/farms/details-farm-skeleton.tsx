@@ -1,6 +1,6 @@
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 
-export function FarmDetailsSkeleton() {
+export function DetailsFarmSkeleton() {
   return (
     <div className="container mx-auto mt-10 p-4">
       {/* Header with title and buttons */}

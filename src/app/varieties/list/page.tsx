@@ -1,11 +1,11 @@
 import { BackButton } from '@/components/back-button';
+import { CreateButton } from '@/components/custom/create-button';
+import { DeleteVarietyButton } from '@/components/delete-variety-button';
 import { EditVarietyButton } from '@/components/edit-variety-button';
 import Pagination from '@/components/pagination';
-import { Button } from '@/components/ui/button';
 import { Table, TableBody, TableCaption, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import VarietySearch from '@/components/variety-search';
 import prisma from '@/lib/prisma';
-import Link from 'next/link';
 
 const ITEMS_PER_PAGE = 20;
 
@@ -50,20 +50,18 @@ export default async function VarietiesPage({ searchParams }: {
         </div>
         <div className="flex gap-3 flex-shrink-0">
           <BackButton />
-          <Link href="/varieties/create">
-            <Button>Cadastrar Variedade</Button>
-          </Link>
+          <CreateButton path="/varieties/create"/>
         </div>
       </div>
 
       {varieties.length > 0 ? (
         <Table>
-          <TableCaption>Uma lista das variedades cadastradas.</TableCaption>
+          <TableCaption>Tabela das variedades cadastradas.</TableCaption>
           <TableHeader>
             <TableRow className="first:bg-gray-200">
               <TableHead>Nome da Variedade</TableHead>
               <TableHead>Ciclo (dias)</TableHead>
-              <TableHead className="text-right">Editar</TableHead>
+              <TableHead className="text-right">Ações</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
@@ -72,7 +70,10 @@ export default async function VarietiesPage({ searchParams }: {
                 <TableCell className="uppercase">{variety.name}</TableCell>
                 <TableCell>{variety.cycle}</TableCell>
                 <TableCell className="text-right">
-                  <EditVarietyButton varietyId={variety.id} />
+                  <div className="flex gap-2 justify-end">
+                    <EditVarietyButton varietyId={variety.id} />
+                    <DeleteVarietyButton varietyId={variety.id} varietyName={variety.name} />
+                  </div>
                 </TableCell>
               </TableRow>
             ))}

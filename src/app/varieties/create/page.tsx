@@ -1,4 +1,5 @@
 import { createVariety } from '@/actions/variety';
+import { BackButton } from '@/components/back-button';
 import { SubmitButton } from '@/components/submit-button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -6,7 +7,7 @@ import { Label } from '@/components/ui/label';
 export default function CreateVarietyPage() {
   return (
     <div className="container mx-auto mt-10 p-4 max-w-lg">
-      <h1 className="text-2xl font-bold mb-4">Cadastrar Nova Variedade</h1>
+      <h1 className="text-2xl font-bold mb-4 text-green-600">Cadastrar Variedade</h1>
 
       <form action={createVariety} className="space-y-5">
         <div>
@@ -31,8 +32,10 @@ export default function CreateVarietyPage() {
             required 
           />
         </div>
-
-        <SubmitButton />
+        <div className='flex justify-between'>
+          <BackButton />
+          <SubmitButton />
+        </div>
       </form>
     </div>
   );

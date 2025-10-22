@@ -1,11 +1,9 @@
 import { BackButton } from '@/components/back-button';
-import { EditPlantingButton } from '@/components/edit-planting-button';
+import { CreateButton } from '@/components/custom/create-button';
 import Pagination from '@/components/pagination';
-import PlantingSearch from '@/components/planting-search';
-import { Button } from '@/components/ui/button';
+import { DeletePlantingButton, EditPlantingButton, PlantingSearch } from '@/components/plantings';
 import { Table, TableBody, TableCaption, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import prisma from '@/lib/prisma';
-import Link from 'next/link';
 
 const ITEMS_PER_PAGE = 20;
 
@@ -103,9 +101,7 @@ export default async function PlantingsPage({ searchParams }: {
         </div>
         <div className="flex gap-3 flex-shrink-0">
           <BackButton />
-          <Link href="/plantings/create">
-            <Button>Cadastrar Plantio</Button>
-          </Link>
+          <CreateButton path='/plantings/create'/>
         </div>
       </div>
 
@@ -144,6 +140,7 @@ export default async function PlantingsPage({ searchParams }: {
                 <TableCell>{new Date(planting.plantingDate).toLocaleDateString('pt-BR')}</TableCell>
                 <TableCell className="text-right">
                   <EditPlantingButton plantingId={planting.id} />
+                  <DeletePlantingButton plantingId={planting.id} />
                 </TableCell>
               </TableRow>
             ))}

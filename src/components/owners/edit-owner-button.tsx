@@ -1,8 +1,9 @@
 'use client';
 
 import { Button } from '@/components/ui/button';
+import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip';
 import { useRouter } from 'next/navigation';
-import { FaPen } from 'react-icons/fa';
+import { FaPencilAlt } from 'react-icons/fa';
 
 interface EditOwnerButtonProps {
   ownerId: number;
@@ -16,13 +17,20 @@ export function EditOwnerButton({ ownerId }: EditOwnerButtonProps) {
   };
 
   return (
-    <Button
-      size="sm"
-      variant="link"
-      onClick={handleEdit}
-      className="h-8 w-8 p-0 border-green-600 text-green-600 hover:bg-green-50"
-    >
-      <FaPen className="h-3 w-3" />
-    </Button>
+    <Tooltip>
+      <TooltipTrigger asChild>
+        <Button
+          size="icon"
+          variant="link"
+          onClick={handleEdit}
+          className="text-green-600 hover:text-green-700 hover:bg-green-50"
+        >
+          <FaPencilAlt className="h-4 w-4" />
+        </Button>
+      </TooltipTrigger>
+      <TooltipContent className="bg-green-600 text-white" arrowClassName="bg-green-600 fill-green-600">
+        <p>Editar Proprietário</p>
+      </TooltipContent>
+    </Tooltip>
   );
 }

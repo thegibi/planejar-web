@@ -370,21 +370,36 @@ export default function CreateApplicationPage() {
                         ))}
                       </div>
                     </div>
-                    <div className="mt-4">
-                      <strong className="text-green-700">Talhões:</strong>
-                      <div className="flex flex-wrap gap-2 mt-2">
-                        {selectedPlantingData.plots.map((plot) => (
-                          <span 
-                            key={plot.id} 
-                            className="bg-blue-100 border border-blue-300 text-blue-800 px-3 py-1 rounded-full text-sm font-medium"
-                          >
-                            {plot.name} ({plot.area} ha)
-                          </span>
-                        ))}
-                      </div>
-                    </div>
                   </CardContent>
                 </Card>
+              )}
+
+              {/* Seleção de Talhões */}
+              {selectedPlantingData && (
+                <div>
+                  <Label className="mb-2">Talhões da Fazenda *</Label>
+                  <MultiSelect
+                    options={farm.plots.map((plot) => ({
+                      label: `${plot.name} (${plot.area} ha)`,
+                      value: plot.id.toString()
+                    }))}
+                    value={formData.plotIds}
+                    onValueChange={(newValues) => {
+                      setFormData(prev => ({ ...prev, plotIds: newValues }));
+                    }}
+                    placeholder="Selecione os talhões"
+                  />
+                  {formData.plotIds.length > 0 && (
+                    <div className="mt-2 text-sm text-gray-600">
+                      <strong>Área total selecionada:</strong>{' '}
+                      {farm.plots
+                        .filter((plot) => formData.plotIds.includes(plot.id.toString()))
+                        .reduce((sum, plot) => sum + plot.area, 0)
+                        .toFixed(2)}{' '}
+                      ha
+                    </div>
+                  )}
+                </div>
               )}
 
               {/* Data da Aplicação */}
