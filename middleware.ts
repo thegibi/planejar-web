@@ -21,7 +21,7 @@ export default auth((req) => {
   // Se estiver autenticado mas acessando a home, redirecionar para dashboard
   if (req.auth && pathname === '/')
   {
-    return Response.redirect(new URL('/dashboard', req.url));
+    return Response.redirect(new URL('/farms/list', req.url));
   }
 });
 
